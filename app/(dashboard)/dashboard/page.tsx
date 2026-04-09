@@ -22,7 +22,7 @@ const statCards = [
   {
     key: 'totalInvoices',
     label: 'Total Invoices',
-    iconBg: 'bg-primary/10',
+    iconBg: 'bg-primary/20',
     iconColor: 'text-primary',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -33,8 +33,8 @@ const statCards = [
   {
     key: 'paid',
     label: 'Paid',
-    iconBg: 'bg-emerald-500/10',
-    iconColor: 'text-emerald-400',
+    iconBg: 'bg-primary/10',
+    iconColor: 'text-primary',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -44,8 +44,8 @@ const statCards = [
   {
     key: 'pending',
     label: 'Pending',
-    iconBg: 'bg-amber-500/10',
-    iconColor: 'text-amber-400',
+    iconBg: 'bg-secondary/20',
+    iconColor: 'text-primary',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -55,8 +55,8 @@ const statCards = [
   {
     key: 'totalRevenue',
     label: 'Total Revenue',
-    iconBg: 'bg-primary/20',
-    iconColor: 'text-primary',
+    iconBg: 'bg-primary/30',
+    iconColor: 'text-foreground',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
