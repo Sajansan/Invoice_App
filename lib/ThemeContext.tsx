@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'slate' | 'lavender' | 'charcoal' | 'sky';
+type Theme = 'slate' | 'lavender' | 'charcoal' | 'sky' | 'pale-mint' | 'lilac' | 'warm-ivory' | 'sky-lavender';
 type Mode = 'dark' | 'light';
 
 interface ThemeContextType {

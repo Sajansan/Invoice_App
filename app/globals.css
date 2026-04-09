@@ -36,6 +36,22 @@
   --primary: #4A90D9;
   --secondary: #FAFAF8;
 }
+[data-theme='pale-mint'] {
+  --primary: #D4F0E8;
+  --secondary: #1E2D2A;
+}
+[data-theme='lilac'] {
+  --primary: #D8CCF0;
+  --secondary: #1A1A2E;
+}
+[data-theme='warm-ivory'] {
+  --primary: #FAF6ED;
+  --secondary: #2A6041;
+}
+[data-theme='sky-lavender'] {
+  --primary: #C8D8F0;
+  --secondary: #B84A28;
+}
 
 @theme inline {
   --color-background: var(--background);
