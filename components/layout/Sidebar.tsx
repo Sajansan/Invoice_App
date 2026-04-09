@@ -60,14 +60,14 @@ export default function Sidebar() {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 py-6">
-        <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="flex items-center gap-2.5 px-5 py-8">
+        <div className="w-10 h-10 rounded-xl bg-mint flex items-center justify-center shadow-[0_0_20px_rgba(62,207,178,0.3)]">
+          <svg className="w-6 h-6 text-[#0a0e12]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <span className="text-lg font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-          InvoiceSaaS
+        <span className="text-xl font-black tracking-tight text-white">
+          Invoice<span className="text-mint">SaaS</span>
         </span>
       </div>
 
@@ -83,20 +83,20 @@ export default function Sidebar() {
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={`
-                group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-                transition-all duration-200
+                group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold
+                transition-all duration-300
                 ${
                   isActive
-                    ? 'bg-indigo-50 text-indigo-700'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-mint/10 text-mint border-r-4 border-mint'
+                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
                 }
               `}
             >
               <span
                 className={`transition-colors ${
                   isActive
-                    ? 'text-indigo-600'
-                    : 'text-gray-400 group-hover:text-gray-600'
+                    ? 'text-mint'
+                    : 'text-gray-500 group-hover:text-mint/80'
                 }`}
               >
                 {item.icon}
@@ -108,13 +108,15 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-4 py-4 border-t border-gray-100">
+      <div className="px-4 py-6 mt-auto border-t border-white/5">
         <div className="flex items-center gap-3 px-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
-            JS
+          <div className="w-10 h-10 rounded-full border-2 border-mint/30 p-0.5">
+            <div className="w-full h-full rounded-full bg-slate flex items-center justify-center text-mint text-xs font-bold">
+              JS
+            </div>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">John Smith</p>
+            <p className="text-sm font-bold text-white truncate">John Smith</p>
             <p className="text-xs text-gray-500 truncate">john@example.com</p>
           </div>
         </div>
@@ -155,7 +157,7 @@ export default function Sidebar() {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 bg-white/80 backdrop-blur-xl border-r border-gray-200/60">
+      <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 bg-background border-r border-white/5">
         {sidebarContent}
       </aside>
     </>

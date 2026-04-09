@@ -10,8 +10,8 @@ interface TableProps {
 
 export function Table({ children, className = '' }: TableProps) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200/70 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-      <table className={`min-w-full divide-y divide-gray-200/80 ${className}`}>
+    <div className="overflow-x-auto rounded-2xl border border-white/5 bg-surface shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+      <table className={`min-w-full divide-y divide-white/5 ${className}`}>
         {children}
       </table>
     </div>
@@ -20,7 +20,7 @@ export function Table({ children, className = '' }: TableProps) {
 
 /* ─── Head ───────────────────────────────────────────────────── */
 export function TableHead({ children }: { children: React.ReactNode }) {
-  return <thead className="bg-gray-50/80">{children}</thead>;
+  return <thead className="bg-[#0a0e12]/20">{children}</thead>;
 }
 
 /* ─── Header Cell ────────────────────────────────────────────── */
@@ -33,7 +33,7 @@ export function TableHeaderCell({
 }) {
   return (
     <th
-      className={`px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 ${className}`}
+      className={`px-5 py-4 text-left text-[11px] font-bold uppercase tracking-widest text-slate-400 ${className}`}
     >
       {children}
     </th>
@@ -42,7 +42,7 @@ export function TableHeaderCell({
 
 /* ─── Body ───────────────────────────────────────────────────── */
 export function TableBody({ children }: { children: React.ReactNode }) {
-  return <tbody className="divide-y divide-gray-100">{children}</tbody>;
+  return <tbody className="divide-y divide-white/5">{children}</tbody>;
 }
 
 /* ─── Row ────────────────────────────────────────────────────── */
@@ -54,7 +54,7 @@ export function TableRow({
   className?: string;
 }) {
   return (
-    <tr className={`transition-colors hover:bg-gray-50/60 ${className}`}>
+    <tr className={`transition-colors hover:bg-white/[0.02] ${className}`}>
       {children}
     </tr>
   );
@@ -71,7 +71,7 @@ export function TableCell({
   colSpan?: number;
 }) {
   return (
-    <td colSpan={colSpan} className={`px-5 py-4 text-sm text-gray-700 whitespace-nowrap ${className}`}>
+    <td colSpan={colSpan} className={`px-5 py-4 text-sm text-gray-300 whitespace-nowrap ${className}`}>
       {children}
     </td>
   );

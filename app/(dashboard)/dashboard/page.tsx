@@ -22,8 +22,8 @@ const statCards = [
   {
     key: 'totalInvoices',
     label: 'Total Invoices',
-    iconBg: 'bg-indigo-100',
-    iconColor: 'text-indigo-600',
+    iconBg: 'bg-slate/20',
+    iconColor: 'text-mint',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -33,8 +33,8 @@ const statCards = [
   {
     key: 'paid',
     label: 'Paid',
-    iconBg: 'bg-emerald-100',
-    iconColor: 'text-emerald-600',
+    iconBg: 'bg-mint/10',
+    iconColor: 'text-mint',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -44,8 +44,8 @@ const statCards = [
   {
     key: 'pending',
     label: 'Pending',
-    iconBg: 'bg-amber-100',
-    iconColor: 'text-amber-600',
+    iconBg: 'bg-amber-500/10',
+    iconColor: 'text-amber-400',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -55,8 +55,8 @@ const statCards = [
   {
     key: 'totalRevenue',
     label: 'Total Revenue',
-    iconBg: 'bg-violet-100',
-    iconColor: 'text-violet-600',
+    iconBg: 'bg-mint/20',
+    iconColor: 'text-mint',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -130,8 +130,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-3xl font-black text-white tracking-tight">Dashboard</h1>
+        <p className="mt-1 text-sm text-gray-400">
           Overview of your invoicing activity
         </p>
       </div>
@@ -142,10 +142,10 @@ export default function DashboardPage() {
           <Card key={card.key} className="p-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
                   {card.label}
                 </p>
-                <p className="mt-2 text-2xl font-bold text-gray-900">
+                <p className="mt-2 text-3xl font-black text-white tracking-tight">
                   {statValues[card.key]}
                 </p>
               </div>
@@ -162,12 +162,12 @@ export default function DashboardPage() {
       {/* Recent invoices */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-xl font-bold text-white tracking-tight">
             Recent Invoices
           </h2>
           <Link
             href="/invoices"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="text-sm font-bold text-mint hover:text-mint/80 transition-all hover:underline decoration-2 underline-offset-4"
           >
             View all →
           </Link>
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                   <TableCell>
                     <Link
                       href={`/invoices/${inv.id}`}
-                      className="font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                      className="font-bold text-mint hover:text-mint/80 hover:underline transition-all"
                     >
                       {inv.invoice_number}
                     </Link>

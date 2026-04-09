@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'InvoiceSaaS — Modern Invoice Management',
+  title: 'Invoice Gen — Modern Invoice Management',
   description:
     'Create, manage, and track invoices with a beautiful, modern SaaS dashboard. Built for freelancers and small businesses.',
 };

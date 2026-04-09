@@ -11,10 +11,10 @@ export default function Card({ children, className = '' }: CardProps) {
   return (
     <div
       className={`
-        bg-white rounded-xl border border-gray-200/70
-        shadow-[0_1px_3px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.06)]
-        transition-shadow duration-300
-        hover:shadow-[0_4px_16px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.06)]
+        bg-surface rounded-2xl border border-white/5
+        shadow-[0_8px_32px_rgba(0,0,0,0.12)]
+        transition-all duration-300
+        hover:border-mint/20 hover:shadow-[0_12px_48px_rgba(0,0,0,0.2)]
         ${className}
       `}
     >

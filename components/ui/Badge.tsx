@@ -13,21 +13,21 @@ const statusConfig: Record<
 > = {
   paid: {
     label: 'Paid',
-    bg: 'bg-emerald-50',
-    text: 'text-emerald-700',
-    dot: 'bg-emerald-500',
+    bg: 'bg-mint/10',
+    text: 'text-mint',
+    dot: 'bg-mint shadow-[0_0_8px_rgba(62,207,178,0.5)]',
   },
   pending: {
     label: 'Pending',
-    bg: 'bg-amber-50',
-    text: 'text-amber-700',
-    dot: 'bg-amber-500',
+    bg: 'bg-amber-500/10',
+    text: 'text-amber-400',
+    dot: 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]',
   },
   overdue: {
     label: 'Overdue',
-    bg: 'bg-red-50',
-    text: 'text-red-700',
-    dot: 'bg-red-500',
+    bg: 'bg-red-500/10',
+    text: 'text-red-400',
+    dot: 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]',
   },
 };
 
