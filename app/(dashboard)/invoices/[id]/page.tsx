@@ -6,6 +6,7 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Spinner from '@/components/ui/Spinner';
+import { jsPDF } from 'jspdf';
 import {
   Table,
   TableHead,
@@ -36,14 +37,20 @@ export default function InvoiceDetailPage() {
   useEffect(() => {
     async function fetchInvoice() {
       try {
-        const { data: inv } = await supabase
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: inv, error: invError } = await supabase
           .from('invoices')
-          .select('*')
+          .select('*, clients(*)')
           .eq('id', invoiceId)
+          .eq('user_id', user.id)
           .single();
 
+        if (invError) throw invError;
+
         if (inv) {
-          setInvoice(inv);
+          setInvoice(inv as Invoice);
 
           const { data: invoiceItems } = await supabase
             .from('invoice_items')
@@ -64,8 +71,110 @@ export default function InvoiceDetailPage() {
 
   async function handleMarkPaid() {
     if (!invoice) return;
-    await supabase.from('invoices').update({ status: 'paid' }).eq('id', invoice.id);
-    setInvoice({ ...invoice, status: 'paid' });
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('invoices')
+        .update({ status: 'paid' })
+        .eq('id', invoice.id)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+      setInvoice({ ...invoice, status: 'paid' });
+    } catch (err) {
+      console.error('Mark as paid error:', err);
+    }
+  }
+
+  async function handleDownloadPDF() {
+    if (!invoice) return;
+    
+    const doc = new jsPDF();
+    const margin = 20;
+    let y = margin;
+
+    // Header
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('INVOICE', margin, y);
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(invoice.invoice_number, doc.internal.pageSize.width - margin, y, { align: 'right' });
+    
+    y += 15;
+    doc.setDrawColor(200);
+    doc.line(margin, y, doc.internal.pageSize.width - margin, y);
+    
+    y += 15;
+    
+    // Parties
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('BILLED TO:', margin, y);
+    
+    doc.setFont('helvetica', 'normal');
+    y += 6;
+    doc.text(invoice.clients?.name || '', margin, y);
+    y += 5;
+    doc.text(invoice.clients?.email || '', margin, y);
+    y += 5;
+    doc.text(invoice.clients?.address || '', margin, y);
+    
+    y = 50; // Reset Y for right side
+    doc.setFont('helvetica', 'bold');
+    doc.text('DATE ISSUED:', 140, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(new Date(invoice.issue_date).toLocaleDateString(), 140, y + 6);
+    
+    y += 15;
+    doc.setFont('helvetica', 'bold');
+    doc.text('DUE DATE:', 140, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(new Date(invoice.due_date).toLocaleDateString(), 140, y + 6);
+    
+    y += 25;
+    
+    // Table Header
+    doc.setFillColor(240, 240, 240);
+    doc.rect(margin, y - 5, doc.internal.pageSize.width - (margin * 2), 10, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.text('Description', margin + 5, y);
+    doc.text('Qty', 130, y, { align: 'right' });
+    doc.text('Price', 155, y, { align: 'right' });
+    doc.text('Total', 190, y, { align: 'right' });
+    
+    y += 10;
+    doc.setFont('helvetica', 'normal');
+    
+    items.forEach((item) => {
+      doc.text(item.description, margin + 5, y);
+      doc.text(item.quantity.toString(), 130, y, { align: 'right' });
+      doc.text(formatCurrency(item.price), 155, y, { align: 'right' });
+      doc.text(formatCurrency(item.total), 190, y, { align: 'right' });
+      y += 8;
+    });
+    
+    y += 10;
+    doc.line(margin, y, doc.internal.pageSize.width - margin, y);
+    y += 10;
+    
+    // Totals
+    const rightSide = 190;
+    doc.text('Subtotal:', 150, y);
+    doc.text(formatCurrency(invoice.subtotal), rightSide, y, { align: 'right' });
+    y += 8;
+    doc.text('Tax:', 150, y);
+    doc.text(formatCurrency(invoice.tax), rightSide, y, { align: 'right' });
+    y += 10;
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Total:', 150, y);
+    doc.text(formatCurrency(invoice.total), rightSide, y, { align: 'right' });
+
+    doc.save(`${invoice.invoice_number}.pdf`);
   }
 
   if (loading) return <Spinner />;
@@ -98,7 +207,20 @@ export default function InvoiceDetailPage() {
           Back to Invoices
         </button>
         <div className="flex items-center gap-3">
-          <Button variant="secondary" id="download-pdf-button">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              const url = `${window.location.origin}/public/invoices/${invoice.id}`;
+              navigator.clipboard.writeText(url);
+              alert('Public link copied to clipboard!');
+            }}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            Copy Link
+          </Button>
+          <Button variant="secondary" id="download-pdf-button" onClick={handleDownloadPDF}>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
@@ -134,13 +256,13 @@ export default function InvoiceDetailPage() {
             Bill To
           </p>
           <p className="text-sm font-medium text-gray-900">
-            {invoice.client_name || '—'}
+            {invoice.clients?.name || '—'}
           </p>
-          {invoice.client_email && (
-            <p className="text-sm text-gray-500">{invoice.client_email}</p>
+          {invoice.clients?.email && (
+            <p className="text-sm text-gray-500">{invoice.clients?.email}</p>
           )}
-          {invoice.client_address && (
-            <p className="text-sm text-gray-500">{invoice.client_address}</p>
+          {invoice.clients?.address && (
+            <p className="text-sm text-gray-500">{invoice.clients?.address}</p>
           )}
         </div>
 

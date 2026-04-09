@@ -53,6 +53,17 @@ const statCards = [
     ),
   },
   {
+    key: 'overdue',
+    label: 'Overdue',
+    iconBg: 'bg-destructive/20',
+    iconColor: 'text-destructive',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    ),
+  },
+  {
     key: 'totalRevenue',
     label: 'Total Revenue',
     iconBg: 'bg-primary/30',
@@ -77,6 +88,7 @@ export default function DashboardPage() {
     totalInvoices: 0,
     paid: 0,
     pending: 0,
+    overdue: 0,
     totalRevenue: 0,
   });
   const [recentInvoices, setRecentInvoices] = useState<Invoice[]>([]);
@@ -85,27 +97,48 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchDashboard() {
       try {
-        const { data: invoices } = await supabase
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: invoices, error } = await supabase
           .from('invoices')
-          .select('*')
+          .select('*, clients(name)')
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
+        if (error) throw error;
+
         if (invoices) {
-          const paid = invoices.filter((i) => i.status === 'paid');
-          const pending = invoices.filter((i) => i.status === 'pending');
+          const now = new Date();
+          const typedInvoices = invoices.map(inv => {
+            const dueDate = new Date(inv.due_date);
+            let status = inv.status;
+            if (status === 'pending' && dueDate < now) {
+              status = 'overdue';
+            }
+            return {
+              ...inv,
+              status
+            };
+          }) as Invoice[];
+
+          const paid = typedInvoices.filter((i) => i.status === 'paid');
+          const pending = typedInvoices.filter((i) => i.status === 'pending');
+          const overdue = typedInvoices.filter((i) => i.status === 'overdue');
           const totalRevenue = paid.reduce(
             (sum: number, i: Invoice) => sum + (i.total || 0),
             0
           );
 
           setStats({
-            totalInvoices: invoices.length,
+            totalInvoices: typedInvoices.length,
             paid: paid.length,
             pending: pending.length,
+            overdue: overdue.length,
             totalRevenue,
           });
 
-          setRecentInvoices(invoices.slice(0, 5));
+          setRecentInvoices(typedInvoices.slice(0, 5));
         }
       } catch (err) {
         console.error('Dashboard fetch error:', err);
@@ -123,6 +156,7 @@ export default function DashboardPage() {
     totalInvoices: stats.totalInvoices,
     paid: stats.paid,
     pending: stats.pending,
+    overdue: stats.overdue,
     totalRevenue: formatCurrency(stats.totalRevenue),
   };
 
@@ -216,7 +250,7 @@ export default function DashboardPage() {
                       {inv.invoice_number}
                     </Link>
                   </TableCell>
-                  <TableCell>{inv.client_name || '—'}</TableCell>
+                  <TableCell>{inv.clients?.name || '—'}</TableCell>
                   <TableCell>
                     <Badge status={inv.status} />
                   </TableCell>

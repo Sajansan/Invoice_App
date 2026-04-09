@@ -5,6 +5,7 @@ import type { InvoiceStatus } from '@/lib/types';
 
 interface BadgeProps {
   status: InvoiceStatus;
+  className?: string;
 }
 
 const statusConfig: Record<
@@ -31,13 +32,14 @@ const statusConfig: Record<
   },
 };
 
-export default function Badge({ status }: BadgeProps) {
+export default function Badge({ status, className = '' }: BadgeProps) {
   const config = statusConfig[status];
   return (
     <span
       className={`
         inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
         ${config.bg} ${config.text}
+        ${className}
       `}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />

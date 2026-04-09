@@ -49,11 +49,19 @@ export default function CreateInvoicePage() {
 
   useEffect(() => {
     async function fetchClients() {
-      const { data } = await supabase
-        .from('clients')
-        .select('*')
-        .order('name');
-      if (data) setClients(data);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data } = await supabase
+          .from('clients')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('name');
+        if (data) setClients(data);
+      } catch (err) {
+        console.error('Fetch clients error:', err);
+      }
     }
     fetchClients();
   }, []);
@@ -92,18 +100,18 @@ export default function CreateInvoicePage() {
     if (!selectedClientId || items.length === 0) return;
 
     setSubmitting(true);
-    const selectedClient = clients.find((c) => c.id === selectedClientId);
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
       const { data: inv, error } = await supabase
         .from('invoices')
         .insert([
           {
+            user_id: user.id,
             invoice_number: generateInvoiceNumber(),
             client_id: selectedClientId,
-            client_name: selectedClient?.name || '',
-            client_email: selectedClient?.email || '',
-            client_address: selectedClient?.address || '',
             status: 'pending',
             issue_date: issueDate,
             due_date: dueDate,
@@ -125,10 +133,14 @@ export default function CreateInvoicePage() {
           price: item.price,
           total: item.total,
         }));
-        await supabase.from('invoice_items').insert(itemsToInsert);
+        const { error: itemsError } = await supabase.from('invoice_items').insert(itemsToInsert);
+        if (itemsError) throw itemsError;
+        
         router.push('/invoices');
+        router.refresh();
       }
-    } catch (err) {
+    } catch (err: any) {
+      alert('Error creating invoice: ' + err.message);
       console.error('Create invoice error:', err);
     } finally {
       setSubmitting(false);

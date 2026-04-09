@@ -29,11 +29,15 @@ export default function ClientsPage() {
 
   const fetchClients = useCallback(async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       const { data } = await supabase
         .from('clients')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
-      if (data) setClients(data);
+      if (data) setClients(data as Client[]);
     } catch (err) {
       console.error('Fetch clients error:', err);
     } finally {
@@ -54,7 +58,7 @@ export default function ClientsPage() {
 
   function openEdit(client: Client) {
     setEditingClient(client);
-    setForm({ name: client.name, email: client.email, address: client.address });
+    setForm({ name: client.name, email: client.email || '', address: client.address || '' });
     setModalOpen(true);
   }
 
@@ -62,15 +66,21 @@ export default function ClientsPage() {
   async function handleSave() {
     setSaving(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
       if (editingClient) {
-        await supabase
+        const { error } = await supabase
           .from('clients')
           .update({ name: form.name, email: form.email, address: form.address })
-          .eq('id', editingClient.id);
+          .eq('id', editingClient.id)
+          .eq('user_id', user.id);
+        if (error) throw error;
       } else {
-        await supabase.from('clients').insert([
-          { name: form.name, email: form.email, address: form.address },
+        const { error } = await supabase.from('clients').insert([
+          { name: form.name, email: form.email, address: form.address, user_id: user.id },
         ]);
+        if (error) throw error;
       }
       setModalOpen(false);
       await fetchClients();

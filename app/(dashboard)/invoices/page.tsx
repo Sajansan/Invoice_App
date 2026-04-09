@@ -30,11 +30,32 @@ export default function InvoicesPage() {
 
   const fetchInvoices = useCallback(async () => {
     try {
-      const { data } = await supabase
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
         .from('invoices')
-        .select('*')
+        .select('*, clients(name)')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
-      if (data) setInvoices(data);
+      
+      if (error) throw error;
+      
+      if (data) {
+        const now = new Date();
+        const typedInvoices = data.map(inv => {
+          const dueDate = new Date(inv.due_date);
+          let status = inv.status;
+          if (status === 'pending' && dueDate < now) {
+            status = 'overdue';
+          }
+          return {
+            ...inv,
+            status
+          };
+        }) as Invoice[];
+        setInvoices(typedInvoices);
+      }
     } catch (err) {
       console.error('Fetch invoices error:', err);
     } finally {
@@ -48,13 +69,33 @@ export default function InvoicesPage() {
 
   async function handleDelete(id: string) {
     if (!confirm('Are you sure you want to delete this invoice?')) return;
-    await supabase.from('invoices').delete().eq('id', id);
-    await fetchInvoices();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase.from('invoices').delete().eq('id', id).eq('user_id', user.id);
+      if (error) throw error;
+      await fetchInvoices();
+    } catch (err) {
+      console.error('Delete invoice error:', err);
+    }
   }
 
   async function handleMarkPaid(id: string) {
-    await supabase.from('invoices').update({ status: 'paid' }).eq('id', id);
-    await fetchInvoices();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('invoices')
+        .update({ status: 'paid' })
+        .eq('id', id)
+        .eq('user_id', user.id);
+      if (error) throw error;
+      await fetchInvoices();
+    } catch (err) {
+      console.error('Mark as paid error:', err);
+    }
   }
 
   if (loading) return <Spinner />;
@@ -118,7 +159,7 @@ export default function InvoicesPage() {
                     {inv.invoice_number}
                   </Link>
                 </TableCell>
-                <TableCell>{inv.client_name || '—'}</TableCell>
+                <TableCell>{inv.clients?.name || '—'}</TableCell>
                 <TableCell>
                   <Badge status={inv.status} />
                 </TableCell>
