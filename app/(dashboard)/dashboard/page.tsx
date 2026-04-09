@@ -22,8 +22,8 @@ const statCards = [
   {
     key: 'totalInvoices',
     label: 'Total Invoices',
-    iconBg: 'bg-slate/20',
-    iconColor: 'text-mint',
+    iconBg: 'bg-primary/10',
+    iconColor: 'text-primary',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -33,8 +33,8 @@ const statCards = [
   {
     key: 'paid',
     label: 'Paid',
-    iconBg: 'bg-mint/10',
-    iconColor: 'text-mint',
+    iconBg: 'bg-emerald-500/10',
+    iconColor: 'text-emerald-400',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -55,8 +55,8 @@ const statCards = [
   {
     key: 'totalRevenue',
     label: 'Total Revenue',
-    iconBg: 'bg-mint/20',
-    iconColor: 'text-mint',
+    iconBg: 'bg-primary/20',
+    iconColor: 'text-primary',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -130,8 +130,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-3xl font-black text-white tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <h1 className="text-3xl font-black text-foreground tracking-tight">Dashboard</h1>
+        <p className="mt-1 text-sm text-muted">
           Overview of your invoicing activity
         </p>
       </div>
@@ -142,10 +142,10 @@ export default function DashboardPage() {
           <Card key={card.key} className="p-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted">
                   {card.label}
                 </p>
-                <p className="mt-2 text-3xl font-black text-white tracking-tight">
+                <p className="mt-2 text-3xl font-black text-foreground tracking-tight">
                   {statValues[card.key]}
                 </p>
               </div>
@@ -162,12 +162,12 @@ export default function DashboardPage() {
       {/* Recent invoices */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-xl font-bold text-foreground tracking-tight">
             Recent Invoices
           </h2>
           <Link
             href="/invoices"
-            className="text-sm font-bold text-mint hover:text-mint/80 transition-all hover:underline decoration-2 underline-offset-4"
+            className="text-sm font-bold text-primary hover:text-primary/80 transition-all hover:underline decoration-2 underline-offset-4"
           >
             View all →
           </Link>
@@ -185,7 +185,7 @@ export default function DashboardPage() {
             action={
               <Link
                 href="/create-invoice"
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-background bg-primary rounded-lg hover:opacity-90 transition-all shadow-[0_4px_12px_rgba(var(--primary),0.2)]"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                   <TableCell>
                     <Link
                       href={`/invoices/${inv.id}`}
-                      className="font-bold text-mint hover:text-mint/80 hover:underline transition-all"
+                      className="font-bold text-primary hover:text-primary/80 hover:underline transition-all"
                     >
                       {inv.invoice_number}
                     </Link>
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                   <TableCell className="font-medium">
                     {formatCurrency(inv.total)}
                   </TableCell>
-                  <TableCell className="text-gray-500">
+                  <TableCell className="text-muted">
                     {new Date(inv.issue_date).toLocaleDateString()}
                   </TableCell>
                 </TableRow>

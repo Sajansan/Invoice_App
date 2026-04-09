@@ -20,7 +20,7 @@ export function Table({ children, className = '' }: TableProps) {
 
 /* ─── Head ───────────────────────────────────────────────────── */
 export function TableHead({ children }: { children: React.ReactNode }) {
-  return <thead className="bg-[#0a0e12]/20">{children}</thead>;
+  return <thead className="bg-background/20">{children}</thead>;
 }
 
 /* ─── Header Cell ────────────────────────────────────────────── */
@@ -33,7 +33,7 @@ export function TableHeaderCell({
 }) {
   return (
     <th
-      className={`px-5 py-4 text-left text-[11px] font-bold uppercase tracking-widest text-slate-400 ${className}`}
+      className={`px-5 py-4 text-left text-[11px] font-bold uppercase tracking-widest text-muted ${className}`}
     >
       {children}
     </th>
@@ -42,7 +42,7 @@ export function TableHeaderCell({
 
 /* ─── Body ───────────────────────────────────────────────────── */
 export function TableBody({ children }: { children: React.ReactNode }) {
-  return <tbody className="divide-y divide-white/5">{children}</tbody>;
+  return <tbody className="divide-y divide-border">{children}</tbody>;
 }
 
 /* ─── Row ────────────────────────────────────────────────────── */
@@ -54,7 +54,7 @@ export function TableRow({
   className?: string;
 }) {
   return (
-    <tr className={`transition-colors hover:bg-white/[0.02] ${className}`}>
+    <tr className={`transition-colors hover:bg-primary/5 ${className}`}>
       {children}
     </tr>
   );

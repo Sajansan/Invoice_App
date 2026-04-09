@@ -2,21 +2,54 @@
 
 /* ─── Design tokens ─────────────────────────────────────────── */
 :root {
+  /* Default: Slate + Mint Theme */
+  --primary: #3ECFB2;
+  --secondary: #3B4F5C;
+  
+  /* Mode: Dark (Default) */
   --background: #0a0e12;
   --foreground: #ffffff;
-  --slate: #3B4F5C;
-  --mint: #3ECFB2;
   --surface: #1e293b;
-  --border: #2d3748;
+  --border:rgba(255, 255, 255, 0.05);
+  --muted: #94a3b8;
+}
+
+/* Base Light Mode overrides */
+[data-mode='light'] {
+  --background: #f8f9fb;
+  --foreground: #111827;
+  --surface: #ffffff;
+  --border: rgba(0, 0, 0, 0.05);
+  --muted: #64748b;
+}
+
+/* Theme overrides */
+[data-theme='lavender'] {
+  --primary: #3D2B7A;
+  --secondary: #EAE6F8;
+}
+[data-theme='charcoal'] {
+  --primary: #FF6B6B;
+  --secondary: #2C2C2E;
+}
+[data-theme='sky'] {
+  --primary: #4A90D9;
+  --secondary: #FAFAF8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-slate: var(--slate);
-  --color-mint: var(--mint);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
   --color-surface: var(--surface);
   --color-border: var(--border);
+  --color-muted: var(--muted);
+  
+  /* Shorthands for existing components */
+  --color-slate: var(--secondary);
+  --color-mint: var(--primary);
+  
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -28,6 +61,7 @@ body {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─── Scrollbar polish ──────────────────────────────────────── */

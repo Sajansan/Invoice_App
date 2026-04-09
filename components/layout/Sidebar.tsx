@@ -61,13 +61,13 @@ export default function Sidebar() {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-5 py-8">
-        <div className="w-10 h-10 rounded-xl bg-mint flex items-center justify-center shadow-[0_0_20px_rgba(62,207,178,0.3)]">
-          <svg className="w-6 h-6 text-[#0a0e12]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(var(--primary),0.3)]">
+          <svg className="w-6 h-6 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <span className="text-xl font-black tracking-tight text-white">
-          Invoice<span className="text-mint">SaaS</span>
+        <span className="text-xl font-black tracking-tight text-foreground">
+          Invoice<span className="text-primary">SaaS</span>
         </span>
       </div>
 
@@ -87,16 +87,16 @@ export default function Sidebar() {
                 transition-all duration-300
                 ${
                   isActive
-                    ? 'bg-mint/10 text-mint border-r-4 border-mint'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    ? 'bg-primary/10 text-primary border-r-4 border-primary'
+                    : 'text-muted hover:bg-surface hover:text-foreground'
                 }
               `}
             >
               <span
                 className={`transition-colors ${
                   isActive
-                    ? 'text-mint'
-                    : 'text-gray-500 group-hover:text-mint/80'
+                    ? 'text-primary'
+                    : 'text-muted group-hover:text-primary/80'
                 }`}
               >
                 {item.icon}
@@ -108,16 +108,16 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-4 py-6 mt-auto border-t border-white/5">
+      <div className="px-4 py-6 mt-auto border-t border-border">
         <div className="flex items-center gap-3 px-2">
-          <div className="w-10 h-10 rounded-full border-2 border-mint/30 p-0.5">
-            <div className="w-full h-full rounded-full bg-slate flex items-center justify-center text-mint text-xs font-bold">
+          <div className="w-10 h-10 rounded-full border-2 border-primary/30 p-0.5">
+            <div className="w-full h-full rounded-full bg-secondary flex items-center justify-center text-primary text-xs font-bold">
               JS
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-white truncate">John Smith</p>
-            <p className="text-xs text-gray-500 truncate">john@example.com</p>
+            <p className="text-sm font-bold text-foreground truncate">John Smith</p>
+            <p className="text-xs text-muted truncate">john@example.com</p>
           </div>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function Sidebar() {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 bg-background border-r border-white/5">
+      <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 bg-background border-r border-border">
         {sidebarContent}
       </aside>
     </>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Navbar() {
   return (
@@ -13,6 +13,11 @@ export default function Navbar() {
 
       {/* Right section */}
       <div className="flex items-center gap-4">
+        {/* Theme & Mode Switcher */}
+        <ThemeSwitcher />
+
+        <div className="h-6 w-px bg-white/10 mx-1" />
+
         {/* Notification bell */}
         <button
           className="relative p-2 rounded-lg text-gray-400 hover:bg-white/5 hover:text-mint transition-colors cursor-pointer"

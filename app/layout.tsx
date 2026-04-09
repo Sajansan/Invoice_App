@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     'Create, manage, and track invoices with a beautiful, modern SaaS dashboard. Built for freelancers and small businesses.',
 };
 
+import { ThemeProvider } from '@/lib/ThemeContext';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +30,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }
