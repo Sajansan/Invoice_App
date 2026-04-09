@@ -13,9 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Invoice Gen — Modern Invoice Management',
+  title: 'Invoice Gen',
   description:
     'Create, manage, and track invoices with a beautiful, modern SaaS dashboard. Built for freelancers and small businesses.',
+  icons: {
+    icon: '/note.png',
+  },
 };
 
 import { ThemeProvider } from '@/lib/ThemeContext';
