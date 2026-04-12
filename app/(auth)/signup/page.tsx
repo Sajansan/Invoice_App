@@ -5,18 +5,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import Card from '@/components/ui/Card';
+import { Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const { error } = await supabase.auth.signUp({
@@ -28,10 +29,12 @@ export default function SignupPage() {
       });
 
       if (error) throw error;
-      alert('Check your email for the confirmation link!');
+      toast.success('Check your email for the confirmation link!', {
+        duration: 5000,
+      });
       router.push('/login');
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message || 'Failed to create account');
     } finally {
       setLoading(false);
     }
@@ -51,11 +54,6 @@ export default function SignupPage() {
 
         <Card className="p-8 shadow-xl border-t-4 border-t-primary">
           <form onSubmit={handleSignup} className="space-y-6">
-            {error && (
-              <div className="p-3 text-xs font-bold bg-destructive/10 text-destructive rounded-lg border border-destructive/20">
-                {error}
-              </div>
-            )}
             <div>
               <label className="block text-xs font-black uppercase tracking-widest text-muted mb-2">
                 Email Address
@@ -73,14 +71,27 @@ export default function SignupPage() {
               <label className="block text-xs font-black uppercase tracking-widest text-muted mb-2">
                 Password
               </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none pr-12"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors p-1"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
             <button
               type="submit"
