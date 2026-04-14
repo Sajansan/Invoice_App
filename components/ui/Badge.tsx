@@ -14,23 +14,24 @@ const statusConfig: Record<
 > = {
   paid: {
     label: 'Paid',
-    bg: 'bg-mint/10',
-    text: 'text-mint',
-    dot: 'bg-mint shadow-[0_0_8px_rgba(62,207,178,0.5)]',
+    bg: 'bg-primary/20',
+    text: 'text-emerald-600 dark:text-primary',
+    dot: 'bg-emerald-500 dark:bg-primary shadow-[0_0_8px_rgba(var(--primary),0.5)]',
   },
   pending: {
     label: 'Pending',
     bg: 'bg-amber-500/10',
-    text: 'text-amber-400',
+    text: 'text-amber-600 dark:text-amber-400',
     dot: 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]',
   },
   overdue: {
     label: 'Overdue',
     bg: 'bg-red-500/10',
-    text: 'text-red-400',
+    text: 'text-red-600 dark:text-red-400',
     dot: 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]',
   },
 };
+
 
 export default function Badge({ status, className = '' }: BadgeProps) {
   const config = statusConfig[status];

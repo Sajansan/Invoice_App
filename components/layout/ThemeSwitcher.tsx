@@ -5,13 +5,9 @@ import { useTheme } from '@/lib/ThemeContext';
 
 const themes = [
   { id: 'slate', name: 'Slate', primary: '#3ECFB2', secondary: '#3B4F5C' },
-  { id: 'lavender', name: 'Lavender', primary: '#3D2B7A', secondary: '#EAE6F8' },
-  { id: 'charcoal', name: 'Charcoal', primary: '#FF6B6B', secondary: '#2C2C2E' },
-  { id: 'sky', name: 'Sky', primary: '#4A90D9', secondary: '#FAFAF8' },
-  { id: 'pale-mint', name: 'Pale Mint', primary: '#D4F0E8', secondary: '#1E2D2A' },
-  { id: 'lilac', name: 'Lilac', primary: '#D8CCF0', secondary: '#1A1A2E' },
-  { id: 'warm-ivory', name: 'Warm Ivory', primary: '#FAF6ED', secondary: '#2A6041' },
-  { id: 'sky-lavender', name: 'Sky Lavender', primary: '#C8D8F0', secondary: '#B84A28' },
+  { id: 'lavender', name: 'Lavender', primary: '#8b5cf6', secondary: '#4c1d95' },
+  { id: 'charcoal', name: 'Charcoal', primary: '#f43f5e', secondary: '#4c0519' },
+  { id: 'sky', name: 'Sky', primary: '#0ea5e9', secondary: '#0c4a6e' },
 ] as const;
 
 export default function ThemeSwitcher() {

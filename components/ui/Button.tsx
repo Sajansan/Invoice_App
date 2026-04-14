@@ -14,20 +14,21 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-mint text-[#0a0e12] hover:bg-mint/90 focus-visible:ring-mint shadow-[0_4px_16px_rgba(62,207,178,0.2)] font-bold',
+    'bg-primary text-background hover:brightness-105 active:scale-95 shadow-[0_4px_16px_rgba(var(--primary),0.2)] font-bold',
   secondary:
-    'bg-slate text-white border border-white/10 hover:bg-slate/80 focus-visible:ring-slate-500 shadow-sm',
+    'bg-surface text-foreground border border-border hover:bg-muted/10 active:scale-95 shadow-sm',
   danger:
-    'bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-500 shadow-sm',
+    'bg-red-500 text-white hover:bg-red-600 active:scale-95 shadow-sm',
   ghost:
-    'bg-transparent text-gray-400 hover:bg-white/5 hover:text-white focus-visible:ring-gray-400',
+    'bg-transparent text-muted hover:bg-muted/10 hover:text-foreground active:scale-95',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-xs',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-5 py-2.5 text-base',
+  sm: 'px-3.5 py-2 text-xs',
+  md: 'px-5 py-2.5 text-sm',
+  lg: 'px-7 py-3 text-base',
 };
+
 
 export default function Button({
   variant = 'primary',

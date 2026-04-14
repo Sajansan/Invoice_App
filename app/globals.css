@@ -2,56 +2,46 @@
 
 /* ─── Design tokens ─────────────────────────────────────────── */
 :root {
-  /* Default: Slate + Mint Theme */
+  /* Default Theme: Slate */
   --primary: #3ECFB2;
-  --secondary: #3B4F5C;
+  --secondary: #3b4f5c;
   
-  /* Mode: Dark (Default) */
-  --background: #0a0e12;
-  --foreground: #ffffff;
-  --surface: #1e293b;
-  --border:rgba(255, 255, 255, 0.05);
-  --muted: #94a3b8;
-}
-
-/* Base Light Mode overrides */
-[data-mode='light'] {
+  /* Mode: Light (Default) */
   --background: #f8f9fb;
   --foreground: #111827;
   --surface: #ffffff;
   --border: rgba(0, 0, 0, 0.05);
   --muted: #64748b;
+  
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+}
+
+/* Mode: Dark overrides */
+[data-mode='dark'] {
+  --background: #0a0e12;
+  --foreground: #ffffff;
+  --surface: #1e293b;
+  --border: rgba(255, 255, 255, 0.05);
+  --muted: #94a3b8;
+  --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* Theme overrides */
 [data-theme='lavender'] {
-  --primary: #3D2B7A;
-  --secondary: #EAE6F8;
+  --primary: #8b5cf6;
+  --secondary: #4c1d95;
 }
 [data-theme='charcoal'] {
-  --primary: #FF6B6B;
-  --secondary: #2C2C2E;
+  --primary: #f43f5e;
+  --secondary: #4c0519;
 }
 [data-theme='sky'] {
-  --primary: #4A90D9;
-  --secondary: #FAFAF8;
+  --primary: #0ea5e9;
+  --secondary: #0c4a6e;
 }
-[data-theme='pale-mint'] {
-  --primary: #D4F0E8;
-  --secondary: #1E2D2A;
-}
-[data-theme='lilac'] {
-  --primary: #D8CCF0;
-  --secondary: #1A1A2E;
-}
-[data-theme='warm-ivory'] {
-  --primary: #FAF6ED;
-  --secondary: #2A6041;
-}
-[data-theme='sky-lavender'] {
-  --primary: #C8D8F0;
-  --secondary: #B84A28;
-}
+
 
 @theme inline {
   --color-background: var(--background);

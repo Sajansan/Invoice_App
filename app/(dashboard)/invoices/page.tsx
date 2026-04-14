@@ -1,19 +1,8 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import Link from 'next/link';
-import Button from '@/components/ui/Button';
-import Badge from '@/components/ui/Badge';
-import Spinner from '@/components/ui/Spinner';
-import EmptyState from '@/components/ui/EmptyState';
-import {
-  Table,
-  TableHead,
-  TableHeaderCell,
-  TableBody,
-  TableRow,
-  TableCell,
-} from '@/components/ui/Table';
+import Modal from '@/components/ui/Modal';
+import CreateInvoiceForm from '@/components/forms/CreateInvoiceForm';
 import { supabase } from '@/lib/supabaseClient';
 import type { Invoice } from '@/lib/types';
 
@@ -27,9 +16,11 @@ function formatCurrency(value: number) {
 export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const fetchInvoices = useCallback(async () => {
     try {
+      setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -98,106 +89,124 @@ export default function InvoicesPage() {
     }
   }
 
-  if (loading) return <Spinner />;
+  if (loading && invoices.length === 0) return <Spinner />;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Invoices</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Track and manage all your invoices
+          <h1 className="text-3xl font-black text-foreground tracking-tight">Invoices</h1>
+          <p className="mt-1 text-sm text-muted">
+            Track and manage all your invoices in one place
           </p>
         </div>
-        <Link href="/create-invoice">
-          <Button id="create-invoice-button">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            New Invoice
-          </Button>
-        </Link>
+        <Button 
+          id="create-invoice-button" 
+          onClick={() => setIsCreateModalOpen(true)}
+          className="shadow-premium active:scale-95"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          New Invoice
+        </Button>
       </div>
 
       {/* Table or empty state */}
       {invoices.length === 0 ? (
         <EmptyState
           icon={
-            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <svg className="w-10 h-10 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           }
           title="No invoices yet"
           description="Create your first invoice to start tracking payments."
           action={
-            <Link href="/create-invoice">
-              <Button size="sm">Create Invoice</Button>
-            </Link>
+            <Button size="md" onClick={() => setIsCreateModalOpen(true)}>Create Invoice</Button>
           }
         />
       ) : (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>Invoice #</TableHeaderCell>
-              <TableHeaderCell>Client</TableHeaderCell>
-              <TableHeaderCell>Status</TableHeaderCell>
-              <TableHeaderCell>Total</TableHeaderCell>
-              <TableHeaderCell>Date</TableHeaderCell>
-              <TableHeaderCell className="text-right">Actions</TableHeaderCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {invoices.map((inv) => (
-              <TableRow key={inv.id}>
-                <TableCell>
-                  <Link
-                    href={`/invoices/${inv.id}`}
-                    className="font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
-                  >
-                    {inv.invoice_number}
-                  </Link>
-                </TableCell>
-                <TableCell>{inv.clients?.name || '—'}</TableCell>
-                <TableCell>
-                  <Badge status={inv.status} />
-                </TableCell>
-                <TableCell className="font-medium">
-                  {formatCurrency(inv.total)}
-                </TableCell>
-                <TableCell className="text-gray-500">
-                  {new Date(inv.issue_date).toLocaleDateString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
+        <div className="bg-surface rounded-2xl border border-border shadow-premium overflow-hidden">
+          <Table>
+            <TableHead>
+              <TableRow className="bg-muted/5 border-b border-border">
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Invoice #</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Client</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Status</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Total</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Date</TableHeaderCell>
+                <TableHeaderCell className="text-right text-[11px] uppercase tracking-wider font-black text-muted">Actions</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {invoices.map((inv) => (
+                <TableRow key={inv.id} className="hover:bg-muted/5 transition-colors">
+                  <TableCell>
                     <Link
                       href={`/invoices/${inv.id}`}
-                      className="px-2.5 py-1.5 text-xs font-medium text-gray-600 rounded-md hover:bg-gray-100 transition-colors"
+                      className="font-bold text-primary hover:underline transition-all"
                     >
-                      View
+                      {inv.invoice_number}
                     </Link>
-                    {inv.status !== 'paid' && (
-                      <button
-                        onClick={() => handleMarkPaid(inv.id)}
-                        className="px-2.5 py-1.5 text-xs font-medium text-emerald-600 rounded-md hover:bg-emerald-50 transition-colors cursor-pointer"
+                  </TableCell>
+                  <TableCell className="font-medium text-foreground">{inv.clients?.name || '—'}</TableCell>
+                  <TableCell>
+                    <Badge status={inv.status} />
+                  </TableCell>
+                  <TableCell className="font-black text-foreground">
+                    {formatCurrency(inv.total)}
+                  </TableCell>
+                  <TableCell className="text-muted font-medium">
+                    {new Date(inv.issue_date).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <Link
+                        href={`/invoices/${inv.id}`}
+                        className="px-3 py-1.5 text-xs font-bold text-muted rounded-xl hover:bg-muted/10 hover:text-foreground transition-all"
                       >
-                        Mark Paid
+                        View
+                      </Link>
+                      {inv.status !== 'paid' && (
+                        <button
+                          onClick={() => handleMarkPaid(inv.id)}
+                          className="px-3 py-1.5 text-xs font-bold text-emerald-500 rounded-xl hover:bg-emerald-500/10 transition-all cursor-pointer"
+                        >
+                          Mark Paid
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(inv.id)}
+                        className="px-3 py-1.5 text-xs font-bold text-red-500 rounded-xl hover:bg-red-500/10 transition-all cursor-pointer"
+                      >
+                        Delete
                       </button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(inv.id)}
-                      className="px-2.5 py-1.5 text-xs font-medium text-red-600 rounded-md hover:bg-red-50 transition-colors cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
+
+      {/* Create Invoice Modal */}
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Create New Invoice"
+        description="Enter the details below to generate a professional invoice for your client."
+      >
+        <CreateInvoiceForm 
+          onSuccess={() => {
+            setIsCreateModalOpen(false);
+            fetchInvoices();
+          }}
+          onCancel={() => setIsCreateModalOpen(false)}
+        />
+      </Modal>
     </div>
   );
 }

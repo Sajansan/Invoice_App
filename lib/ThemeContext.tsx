@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'slate' | 'lavender' | 'charcoal' | 'sky' | 'pale-mint' | 'lilac' | 'warm-ivory' | 'sky-lavender';
+type Theme = 'slate' | 'lavender' | 'charcoal' | 'sky';
 type Mode = 'dark' | 'light';
 
 interface ThemeContextType {
@@ -16,13 +16,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('slate');
-  const [mode, setMode] = useState<Mode>('dark');
+  const [mode, setMode] = useState<Mode>('light');
 
   useEffect(() => {
     // Sync with DOM
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-mode', mode);
   }, [theme, mode]);
+
 
   const toggleMode = () => {
     setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));

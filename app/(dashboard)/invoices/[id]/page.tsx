@@ -194,14 +194,14 @@ export default function InvoiceDetailPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
       {/* Back + actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <button
           onClick={() => router.push('/invoices')}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted hover:text-foreground transition-all cursor-pointer group"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
           Back to Invoices
@@ -209,25 +209,26 @@ export default function InvoiceDetailPage() {
         <div className="flex items-center gap-3">
           <Button
             variant="secondary"
+            className="shadow-premium"
             onClick={() => {
               const url = `${window.location.origin}/public/invoices/${invoice.id}`;
               navigator.clipboard.writeText(url);
               alert('Public link copied to clipboard!');
             }}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
             Copy Link
           </Button>
-          <Button variant="secondary" id="download-pdf-button" onClick={handleDownloadPDF}>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <Button variant="secondary" className="shadow-premium" id="download-pdf-button" onClick={handleDownloadPDF}>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Download PDF
           </Button>
           {invoice.status !== 'paid' && (
-            <Button onClick={handleMarkPaid} id="mark-paid-button">
+            <Button onClick={handleMarkPaid} id="mark-paid-button" className="shadow-premium">
               Mark as Paid
             </Button>
           )}
@@ -235,66 +236,81 @@ export default function InvoiceDetailPage() {
       </div>
 
       {/* Invoice card */}
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden border-none shadow-2xl">
         {/* Header bar */}
-        <div className="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">
+        <div className="px-10 py-10 bg-muted/5 border-b border-border/50 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+          <div className="space-y-1">
+            <h1 className="text-4xl font-black text-foreground tracking-tighter">
               {invoice.invoice_number}
             </h1>
-            <p className="text-sm text-gray-500 mt-0.5">
-              Issued {new Date(invoice.issue_date).toLocaleDateString()} · Due{' '}
-              {new Date(invoice.due_date).toLocaleDateString()}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-bold text-muted">
+              <span>Issued {new Date(invoice.issue_date).toLocaleDateString()}</span>
+              <span className="text-border">•</span>
+              <span className="text-primary">Due {new Date(invoice.due_date).toLocaleDateString()}</span>
+            </div>
           </div>
           <Badge status={invoice.status} />
         </div>
 
-        {/* Client info */}
-        <div className="px-6 py-5 border-b border-gray-100">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
-            Bill To
-          </p>
-          <p className="text-sm font-medium text-gray-900">
-            {invoice.clients?.name || '—'}
-          </p>
-          {invoice.clients?.email && (
-            <p className="text-sm text-gray-500">{invoice.clients?.email}</p>
-          )}
-          {invoice.clients?.address && (
-            <p className="text-sm text-gray-500">{invoice.clients?.address}</p>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b border-border/50">
+          {/* Client info */}
+          <div className="px-10 py-10 border-b md:border-b-0 md:border-r border-border/50">
+            <p className="text-[11px] font-black uppercase tracking-widest text-muted/60 mb-4">
+              Billed To
+            </p>
+            <p className="text-xl font-black text-foreground">
+              {invoice.clients?.name || '—'}
+            </p>
+            <div className="mt-2 space-y-1 text-sm font-bold text-muted/80">
+              {invoice.clients?.email && <p>{invoice.clients?.email}</p>}
+              {invoice.clients?.address && <p className="leading-relaxed">{invoice.clients?.address}</p>}
+            </div>
+          </div>
+
+          {/* Business Info (Optional/Placeholder) */}
+          <div className="px-10 py-10 bg-muted/5">
+            <p className="text-[11px] font-black uppercase tracking-widest text-muted/60 mb-4">
+              Your Business
+            </p>
+            <p className="text-xl font-black text-foreground">
+              InvoiceSaaS Inc.
+            </p>
+            <p className="mt-2 text-sm font-bold text-muted/80 leading-relaxed">
+              123 Finance Plaza<br />
+              London, United Kingdom
+            </p>
+          </div>
         </div>
 
         {/* Items table */}
-        <div className="px-6 py-5 border-b border-gray-100">
+        <div className="px-10 py-10">
           <Table>
             <TableHead>
-              <TableRow>
-                <TableHeaderCell>Description</TableHeaderCell>
-                <TableHeaderCell className="text-right">Qty</TableHeaderCell>
-                <TableHeaderCell className="text-right">Price</TableHeaderCell>
-                <TableHeaderCell className="text-right">Total</TableHeaderCell>
+              <TableRow className="border-b-2 border-border">
+                <TableHeaderCell className="text-[11px] font-black uppercase tracking-widest text-muted py-4">Description</TableHeaderCell>
+                <TableHeaderCell className="text-right text-[11px] font-black uppercase tracking-widest text-muted py-4">Qty</TableHeaderCell>
+                <TableHeaderCell className="text-right text-[11px] font-black uppercase tracking-widest text-muted py-4">Price</TableHeaderCell>
+                <TableHeaderCell className="text-right text-[11px] font-black uppercase tracking-widest text-muted py-4">Total</TableHeaderCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.length > 0 ? (
                 items.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell className="text-right">{item.quantity}</TableCell>
-                    <TableCell className="text-right">
+                  <TableRow key={item.id} className="border-b border-border/30 last:border-0">
+                    <TableCell className="py-5 font-bold text-foreground">{item.description}</TableCell>
+                    <TableCell className="text-right py-5 font-bold text-muted">{item.quantity}</TableCell>
+                    <TableCell className="text-right py-5 font-bold text-muted">
                       {formatCurrency(item.price)}
                     </TableCell>
-                    <TableCell className="text-right font-medium">
+                    <TableCell className="text-right py-5 font-black text-foreground">
                       {formatCurrency(item.total)}
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-gray-400">
-                    No items
+                  <TableCell colSpan={4} className="text-center py-10 text-muted font-bold">
+                    No items listed
                   </TableCell>
                 </TableRow>
               )}
@@ -303,24 +319,24 @@ export default function InvoiceDetailPage() {
         </div>
 
         {/* Totals */}
-        <div className="px-6 py-5">
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-8 text-sm">
-              <span className="text-gray-500">Subtotal</span>
-              <span className="font-medium text-gray-900 w-28 text-right">
+        <div className="px-10 py-10 bg-muted/5 border-t border-border/50">
+          <div className="flex flex-col items-end gap-3">
+            <div className="flex items-center gap-12 text-sm font-bold">
+              <span className="text-muted">Subtotal</span>
+              <span className="text-foreground w-32 text-right">
                 {formatCurrency(invoice.subtotal)}
               </span>
             </div>
-            <div className="flex items-center gap-8 text-sm">
-              <span className="text-gray-500">Tax</span>
-              <span className="font-medium text-gray-900 w-28 text-right">
+            <div className="flex items-center gap-12 text-sm font-bold">
+              <span className="text-muted">Tax</span>
+              <span className="text-foreground w-32 text-right">
                 {formatCurrency(invoice.tax)}
               </span>
             </div>
-            <div className="h-px w-40 bg-gray-200 my-1" />
-            <div className="flex items-center gap-8 text-base">
-              <span className="font-semibold text-gray-900">Total</span>
-              <span className="font-bold text-gray-900 w-28 text-right">
+            <div className="h-px w-48 bg-border my-2" />
+            <div className="flex items-center gap-12">
+              <span className="text-xl font-black text-muted uppercase tracking-tighter">Total Amount</span>
+              <span className="text-3xl font-black text-primary w-40 text-right tracking-tight">
                 {formatCurrency(invoice.total)}
               </span>
             </div>
