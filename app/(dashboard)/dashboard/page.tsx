@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Spinner from '@/components/ui/Spinner';
+import Modal from '@/components/ui/Modal';
 import {
   Table,
   TableHead,
@@ -91,8 +92,10 @@ export default function DashboardPage() {
     overdue: 0,
     totalRevenue: 0,
   });
+  const [allInvoices, setAllInvoices] = useState<Invoice[]>([]);
   const [recentInvoices, setRecentInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isViewAllOpen, setIsViewAllOpen] = useState(false);
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -121,6 +124,8 @@ export default function DashboardPage() {
               status
             };
           }) as Invoice[];
+
+          setAllInvoices(typedInvoices);
 
           const paid = typedInvoices.filter((i) => i.status === 'paid');
           const pending = typedInvoices.filter((i) => i.status === 'pending');
@@ -199,12 +204,12 @@ export default function DashboardPage() {
           <h2 className="text-xl font-bold text-foreground tracking-tight">
             Recent Invoices
           </h2>
-          <Link
-            href="/invoices"
-            className="text-sm font-bold text-primary hover:text-primary/80 transition-all hover:underline decoration-2 underline-offset-4"
+          <button
+            onClick={() => setIsViewAllOpen(true)}
+            className="text-sm font-bold text-primary hover:text-primary/80 transition-all hover:underline decoration-2 underline-offset-4 cursor-pointer"
           >
             View all →
-          </Link>
+          </button>
         </div>
 
         {recentInvoices.length === 0 ? (
@@ -266,6 +271,48 @@ export default function DashboardPage() {
           </Table>
         )}
       </div>
+
+      {/* View All Invoices Modal */}
+      <Modal
+        isOpen={isViewAllOpen}
+        onClose={() => setIsViewAllOpen(false)}
+        title="All Invoices"
+        description="A complete list of all your invoices and their current status."
+      >
+        <div className="max-h-[60vh] overflow-y-auto pr-2">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Invoice</TableHeaderCell>
+                <TableHeaderCell>Client</TableHeaderCell>
+                <TableHeaderCell>Status</TableHeaderCell>
+                <TableHeaderCell>Total</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allInvoices.map((inv) => (
+                <TableRow key={inv.id}>
+                  <TableCell>
+                    <Link
+                      href={`/invoices/${inv.id}`}
+                      className="font-bold text-primary hover:text-primary/80 hover:underline transition-all"
+                    >
+                      {inv.invoice_number}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{inv.clients?.name || '—'}</TableCell>
+                  <TableCell>
+                    <Badge status={inv.status} />
+                  </TableCell>
+                  <TableCell className="font-medium text-right">
+                    {formatCurrency(inv.total)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </Modal>
     </div>
   );
 }
