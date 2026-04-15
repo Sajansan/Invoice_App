@@ -1,7 +1,20 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
+import Link from 'next/link';
 import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
+import Spinner from '@/components/ui/Spinner';
+import EmptyState from '@/components/ui/EmptyState';
+import {
+  Table,
+  TableHead,
+  TableHeaderCell,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@/components/ui/Table';
 import CreateInvoiceForm from '@/components/forms/CreateInvoiceForm';
 import { supabase } from '@/lib/supabaseClient';
 import type { Invoice } from '@/lib/types';

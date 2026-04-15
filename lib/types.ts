@@ -11,7 +11,7 @@ export interface Client {
 // ─── Invoice Item ──────────────────────────────────────────────
 export interface InvoiceItem {
   id: string;
-  invoice_id: string;
+  invoice_id?: string;
   description: string;
   quantity: number;
   price: number;
