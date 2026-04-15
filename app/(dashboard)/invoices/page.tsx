@@ -171,10 +171,10 @@ export default function InvoicesPage() {
             <TableHead>
               <TableRow className="bg-muted/5 border-b border-border">
                 <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Invoice #</TableHeaderCell>
-                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Client</TableHeaderCell>
-                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Status</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted hidden sm:table-cell">Client</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted hidden md:table-cell">Status</TableHeaderCell>
                 <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Total</TableHeaderCell>
-                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Date</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted hidden lg:table-cell">Date</TableHeaderCell>
                 <TableHeaderCell className="text-right text-[11px] uppercase tracking-wider font-black text-muted">Actions</TableHeaderCell>
               </TableRow>
             </TableHead>
@@ -189,14 +189,14 @@ export default function InvoicesPage() {
                       {inv.invoice_number}
                     </Link>
                   </TableCell>
-                  <TableCell className="font-medium text-foreground">{inv.clients?.name || '—'}</TableCell>
-                  <TableCell>
+                  <TableCell className="font-medium text-foreground hidden sm:table-cell">{inv.clients?.name || '—'}</TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Badge status={inv.status} />
                   </TableCell>
                   <TableCell className="font-black text-foreground">
                     {formatCurrency(inv.total)}
                   </TableCell>
-                  <TableCell className="text-muted font-medium">
+                  <TableCell className="text-muted font-medium hidden lg:table-cell">
                     {new Date(inv.issue_date).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="text-right">

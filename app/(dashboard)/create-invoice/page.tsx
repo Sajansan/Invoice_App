@@ -148,17 +148,17 @@ export default function CreateInvoicePage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6 animate-fadeIn pb-10">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Create Invoice</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-3xl font-black text-foreground tracking-tight">Create Invoice</h1>
+        <p className="mt-1 text-sm text-muted">
           Fill in the details to generate a new invoice
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic info card */}
-        <Card className="p-6 space-y-5">
+        <Card className="p-6 space-y-5 border-none shadow-premium">
           <Select
             id="client-select"
             label="Client"
@@ -189,13 +189,13 @@ export default function CreateInvoicePage() {
         </Card>
 
         {/* Items card */}
-        <Card className="p-6">
+        <Card className="p-6 border-none shadow-premium">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-lg font-black text-foreground tracking-tight">
               Invoice Items
             </h2>
-            <Button type="button" variant="secondary" size="sm" onClick={addItem}>
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <Button type="button" variant="ghost" size="sm" onClick={addItem} className="text-primary hover:text-primary">
+              <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
               Add Item
@@ -206,7 +206,7 @@ export default function CreateInvoicePage() {
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className="grid grid-cols-12 gap-3 items-end p-4 rounded-lg bg-gray-50/80 border border-gray-100"
+                className="grid grid-cols-12 gap-3 items-end p-4 rounded-xl bg-surface border border-border group relative transition-all duration-300 hover:border-primary/30 shadow-sm"
               >
                 <div className="col-span-12 sm:col-span-5">
                   <Input
@@ -249,7 +249,7 @@ export default function CreateInvoicePage() {
                 </div>
                 <div className="col-span-3 sm:col-span-2">
                   <p
-                    className={`text-sm font-medium text-gray-900 py-2.5 text-right ${
+                    className={`text-sm font-black text-foreground py-2.5 text-right ${
                       index === 0 ? 'mt-6' : ''
                     }`}
                   >
@@ -263,11 +263,11 @@ export default function CreateInvoicePage() {
                     disabled={items.length <= 1}
                     className={`p-2 rounded-lg transition-colors cursor-pointer ${
                       items.length <= 1
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                        ? 'text-muted/30 cursor-not-allowed'
+                        : 'text-muted hover:text-red-500 hover:bg-red-50'
                     } ${index === 0 ? 'mt-6' : ''}`}
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
@@ -278,35 +278,37 @@ export default function CreateInvoicePage() {
         </Card>
 
         {/* Summary card */}
-        <Card className="p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Summary</h2>
+        <Card className="p-6 border-none shadow-premium">
+          <h2 className="text-lg font-black text-foreground tracking-tight mb-4">Summary</h2>
           <div className="flex flex-col items-end space-y-3">
-            <div className="flex items-center gap-8 text-sm">
-              <span className="text-gray-500">Subtotal</span>
-              <span className="font-medium text-gray-900 w-28 text-right">
+            <div className="flex items-center gap-8 text-sm font-bold">
+              <span className="text-muted">Subtotal</span>
+              <span className="text-foreground w-32 text-right">
                 {formatCurrency(subtotal)}
               </span>
             </div>
-            <div className="flex items-center gap-4 text-sm">
-              <span className="text-gray-500">Tax (%)</span>
-              <input
-                id="tax-input"
-                type="number"
-                min={0}
-                max={100}
-                step="0.01"
-                value={tax}
-                onChange={(e) => setTax(Number(e.target.value))}
-                className="w-20 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-right focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none"
-              />
-              <span className="font-medium text-gray-900 w-28 text-right">
-                {formatCurrency(taxAmount)}
-              </span>
+            <div className="flex items-center gap-4 text-sm font-bold">
+              <span className="text-muted">Tax (%)</span>
+              <div className="flex items-center gap-2">
+                <input
+                  id="tax-input"
+                  type="number"
+                  min={0}
+                  max={100}
+                  step="0.01"
+                  value={tax}
+                  onChange={(e) => setTax(Number(e.target.value))}
+                  className="w-20 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-sm text-right focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                />
+                <span className="text-foreground w-28 text-right">
+                  {formatCurrency(taxAmount)}
+                </span>
+              </div>
             </div>
-            <div className="h-px w-56 bg-gray-200 my-1" />
-            <div className="flex items-center gap-8 text-lg">
-              <span className="font-semibold text-gray-900">Total</span>
-              <span className="font-bold text-gray-900 w-28 text-right">
+            <div className="h-px w-56 bg-border my-2" />
+            <div className="flex items-center gap-8 text-xl font-black">
+              <span className="text-muted uppercase tracking-tighter">Total Amount</span>
+              <span className="text-primary w-40 text-right tracking-tight">
                 {formatCurrency(total)}
               </span>
             </div>
@@ -314,8 +316,8 @@ export default function CreateInvoicePage() {
         </Card>
 
         {/* Submit */}
-        <div className="flex justify-end">
-          <Button type="submit" size="lg" loading={submitting} id="submit-invoice-button">
+        <div className="flex justify-end pt-4">
+          <Button type="submit" size="lg" loading={submitting} id="submit-invoice-button" className="min-w-[200px] shadow-premium">
             Create Invoice
           </Button>
         </div>

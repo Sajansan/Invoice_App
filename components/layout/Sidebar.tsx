@@ -118,20 +118,30 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile hamburger */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-gray-200 cursor-pointer"
-        id="mobile-menu-button"
-      >
-        <svg className="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-background/80 backdrop-blur-xl border-b border-border px-4 flex items-center">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="p-2 bg-surface rounded-xl shadow-premium border border-border text-foreground cursor-pointer active:scale-95 transition-transform"
+          id="mobile-menu-button"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div className="ml-4 flex items-center gap-2">
+           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <svg className="w-5 h-5 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+           </div>
+           <span className="font-black text-foreground tracking-tight">Invoice<span className="text-primary">SaaS</span></span>
+        </div>
+      </div>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm animate-fadeIn"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -139,16 +149,26 @@ export default function Sidebar() {
       {/* Mobile sidebar */}
       <aside
         className={`
-          lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white/95 backdrop-blur-xl border-r border-gray-200/60
-          transform transition-transform duration-300 ease-in-out
+          lg:hidden fixed inset-y-0 left-0 z-[60] w-72 bg-background border-r border-border shadow-2xl
+          transform transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1)
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
+        <div className="absolute top-4 right-4 lg:hidden">
+          <button 
+            onClick={() => setMobileOpen(false)}
+            className="p-2 text-muted hover:text-foreground transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
         {sidebarContent}
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 bg-background border-r border-border">
+      <aside className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 bg-background border-r border-border shadow-sm">
         {sidebarContent}
       </aside>
     </>

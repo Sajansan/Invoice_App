@@ -239,10 +239,10 @@ export default function DashboardPage() {
             <TableHead>
               <TableRow>
                 <TableHeaderCell>Invoice</TableHeaderCell>
-                <TableHeaderCell>Client</TableHeaderCell>
-                <TableHeaderCell>Status</TableHeaderCell>
-                <TableHeaderCell>Total</TableHeaderCell>
-                <TableHeaderCell>Date</TableHeaderCell>
+                <TableHeaderCell className="hidden sm:table-cell">Client</TableHeaderCell>
+                <TableHeaderCell className="hidden md:table-cell">Status</TableHeaderCell>
+                <TableHeaderCell className="text-right">Total</TableHeaderCell>
+                <TableHeaderCell className="hidden lg:table-cell">Date</TableHeaderCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -256,14 +256,14 @@ export default function DashboardPage() {
                       {inv.invoice_number}
                     </Link>
                   </TableCell>
-                  <TableCell>{inv.clients?.name || '—'}</TableCell>
-                  <TableCell>
+                  <TableCell className="hidden sm:table-cell">{inv.clients?.name || '—'}</TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Badge status={inv.status} />
                   </TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-bold text-right text-foreground">
                     {formatCurrency(inv.total)}
                   </TableCell>
-                  <TableCell className="text-muted">
+                  <TableCell className="text-muted hidden lg:table-cell">
                     {new Date(inv.issue_date).toLocaleDateString()}
                   </TableCell>
                 </TableRow>

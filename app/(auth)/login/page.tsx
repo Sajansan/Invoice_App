@@ -48,10 +48,10 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <Card className="p-8 shadow-xl border-t-4 border-t-primary">
+        <Card className="p-8 shadow-premium border-none bg-surface">
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-xs font-black uppercase tracking-widest text-muted mb-2">
+              <label className="block text-xs font-black uppercase tracking-widest text-muted mb-2 px-1">
                 Email Address
               </label>
               <input
@@ -59,12 +59,12 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground placeholder:text-muted/40"
                 placeholder="name@company.com"
               />
             </div>
             <div>
-              <label className="block text-xs font-black uppercase tracking-widest text-muted mb-2">
+              <label className="block text-xs font-black uppercase tracking-widest text-muted mb-2 px-1">
                 Password
               </label>
               <div className="relative">
@@ -73,13 +73,13 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none pr-12"
+                  className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none pr-12 text-foreground placeholder:text-muted/40"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors p-2 cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -92,7 +92,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 rounded-xl bg-primary text-background font-black tracking-tight hover:opacity-90 transition-all shadow-[0_4px_12px_rgba(var(--primary),0.3)] disabled:opacity-50"
+              className="w-full py-4 rounded-xl bg-primary text-background font-black tracking-tight hover:brightness-105 active:scale-[0.98] transition-all shadow-premium disabled:opacity-50 cursor-pointer mt-2"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>

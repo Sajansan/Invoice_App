@@ -164,8 +164,8 @@ export default function ClientsPage() {
             <TableHead>
               <TableRow className="bg-muted/5 border-b border-border">
                 <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Name</TableHeaderCell>
-                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Email</TableHeaderCell>
-                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted">Address</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted hidden sm:table-cell">Email</TableHeaderCell>
+                <TableHeaderCell className="text-[11px] uppercase tracking-wider font-black text-muted hidden md:table-cell">Address</TableHeaderCell>
                 <TableHeaderCell className="text-right text-[11px] uppercase tracking-wider font-black text-muted">Actions</TableHeaderCell>
               </TableRow>
             </TableHead>
@@ -175,8 +175,8 @@ export default function ClientsPage() {
                   <TableCell className="font-bold text-foreground">
                     {client.name}
                   </TableCell>
-                  <TableCell className="text-muted font-medium">{client.email}</TableCell>
-                  <TableCell className="max-w-xs truncate text-muted font-medium">
+                  <TableCell className="text-muted font-medium hidden sm:table-cell">{client.email}</TableCell>
+                  <TableCell className="max-w-xs truncate text-muted font-medium hidden md:table-cell">
                     {client.address || '—'}
                   </TableCell>
                   <TableCell className="text-right">

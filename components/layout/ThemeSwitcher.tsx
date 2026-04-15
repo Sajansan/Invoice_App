@@ -19,7 +19,7 @@ export default function ThemeSwitcher() {
       {/* Mode Toggle */}
       <button
         onClick={toggleMode}
-        className="p-2 rounded-xl bg-surface border border-white/5 hover:bg-white/5 text-foreground transition-all cursor-pointer shadow-sm"
+        className="p-2 rounded-xl bg-surface border border-border hover:bg-muted/10 text-foreground transition-all cursor-pointer shadow-premium active:scale-95"
         title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
       >
         {mode === 'dark' ? (
@@ -37,15 +37,15 @@ export default function ThemeSwitcher() {
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-2 p-1.5 pl-2 rounded-xl bg-surface border border-white/5 hover:bg-white/5 transition-all cursor-pointer shadow-sm"
+          className="flex items-center gap-2 p-2 rounded-xl bg-surface border border-border hover:bg-muted/10 transition-all cursor-pointer shadow-premium active:scale-95"
         >
           <div 
-            className="w-5 h-5 rounded-full border border-white/10" 
+            className="w-5 h-5 rounded-full border border-border" 
             style={{ 
               background: `linear-gradient(135deg, ${themes.find(t => t.id === theme)?.secondary} 50%, ${themes.find(t => t.id === theme)?.primary} 50%)` 
             }}
           />
-          <svg className={`w-4 h-4 text-muted transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className={`w-4 h-4 text-muted transition-transform duration-300 ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -53,7 +53,7 @@ export default function ThemeSwitcher() {
         {open && (
           <>
             <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
-            <div className="absolute right-0 mt-2 w-48 rounded-2xl bg-surface border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.3)] z-40 overflow-hidden animate-slideUp">
+            <div className="absolute right-0 mt-3 w-48 rounded-2xl bg-surface border border-border shadow-premium z-40 overflow-hidden animate-slideUp">
               <div className="p-2 space-y-1">
                 {themes.map((t) => (
                   <button
@@ -63,13 +63,13 @@ export default function ThemeSwitcher() {
                       setOpen(false);
                     }}
                     className={`
-                      w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-all
-                      ${theme === t.id ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-white/5'}
+                      w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all
+                      ${theme === t.id ? 'bg-primary/10 text-primary font-bold' : 'text-foreground hover:bg-muted/10'}
                     `}
                   >
                     <span className="font-medium">{t.name}</span>
                     <div 
-                      className="w-4 h-4 rounded-full border border-white/10" 
+                      className="w-4 h-4 rounded-full border border-border" 
                       style={{ 
                         background: `linear-gradient(135deg, ${t.secondary} 50%, ${t.primary} 50%)` 
                       }}
