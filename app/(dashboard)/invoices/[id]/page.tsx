@@ -318,7 +318,7 @@ export default function InvoiceDetailPage() {
               Your Business
             </p>
             <p className="text-xl font-black text-foreground">
-              InvoiceSaaS Inc.
+              InvoiceGen Inc.
             </p>
             <p className="mt-2 text-sm font-bold text-muted/80 leading-relaxed">
               123 Finance Plaza<br />
