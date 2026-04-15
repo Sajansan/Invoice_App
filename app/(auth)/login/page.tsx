@@ -40,8 +40,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-black text-foreground tracking-tight mb-2">
-            Welcome Back
+          <h1 className="text-4xl font-black tracking-tight mb-2">
+            Welcome <span className="text-primary">Back</span>
           </h1>
           <p className="text-muted text-sm font-medium">
             Sign in to manage your invoices and clients
@@ -92,7 +92,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 rounded-xl bg-primary text-background font-black tracking-tight hover:brightness-105 active:scale-[0.98] transition-all shadow-premium disabled:opacity-50 cursor-pointer mt-2"
+              className="w-full py-3 rounded-xl bg-primary text-background font-black tracking-tight hover:brightness-105 active:scale-[0.98] transition-all shadow-premium disabled:opacity-50 cursor-pointer mt-2"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>

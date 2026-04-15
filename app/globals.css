@@ -2,33 +2,37 @@
 
 /* ─── Design tokens ─────────────────────────────────────────── */
 :root {
-  /* Default Theme: Slate */
-  --primary: #3ECFB2;
-  --secondary: #3b4f5c;
+  /* Default Theme: Sky */
+  --primary: #0ea5e9;
+  --secondary: #0c4a6e;
   
-  /* Mode: Light (Default) */
-  --background: #f8f9fb;
-  --foreground: #111827;
-  --surface: #ffffff;
-  --border: rgba(0, 0, 0, 0.05);
+  /* Mode: Light (Default) - Using dim white colors */
+  --background: #d1d5db;
+  --foreground: #0f172a;
+  --surface: #e5e7eb;
+  --border: rgba(0, 0, 0, 0.08);
   --muted: #64748b;
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
-  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
 }
 
 /* Mode: Dark overrides */
 [data-mode='dark'] {
-  --background: #0a0e12;
-  --foreground: #ffffff;
-  --surface: #1e293b;
-  --border: rgba(255, 255, 255, 0.05);
+  --background: #020617;
+  --foreground: #f8fafc;
+  --surface: #0f172a;
+  --border: rgba(255, 255, 255, 0.08);
   --muted: #94a3b8;
   --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* Theme overrides */
+[data-theme='slate'] {
+  --primary: #3ECFB2;
+  --secondary: #3b4f5c;
+}
 [data-theme='lavender'] {
   --primary: #8b5cf6;
   --secondary: #4c1d95;
