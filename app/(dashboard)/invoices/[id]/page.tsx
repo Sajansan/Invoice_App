@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
+import { Skeleton, SkeletonCircle } from '@/components/ui/Skeleton';
 import Spinner from '@/components/ui/Spinner';
 import { jsPDF } from 'jspdf';
 import {
@@ -177,7 +178,51 @@ export default function InvoiceDetailPage() {
     doc.save(`${invoice.invoice_number}.pdf`);
   }
 
-  if (loading) return <Spinner />;
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-6 w-32" />
+          <div className="flex gap-3">
+            <Skeleton className="h-10 w-28" />
+            <Skeleton className="h-10 w-28" />
+          </div>
+        </div>
+        <div className="bg-surface rounded-2xl border border-border shadow-premium overflow-hidden">
+          <div className="p-10 bg-muted/5 border-b border-border/50 flex justify-between">
+             <div className="space-y-3">
+                <Skeleton className="h-10 w-48" />
+                <Skeleton className="h-4 w-64" />
+             </div>
+             <Skeleton className="h-8 w-24 rounded-full" />
+          </div>
+          <div className="grid grid-cols-2">
+             <div className="p-10 border-r border-border/50 space-y-4">
+                <Skeleton className="h-3 w-20" />
+                <Skeleton className="h-6 w-40" />
+                <Skeleton className="h-4 w-48" />
+             </div>
+             <div className="p-10 bg-muted/5 space-y-4">
+                <Skeleton className="h-3 w-20" />
+                <Skeleton className="h-6 w-40" />
+                <Skeleton className="h-4 w-48" />
+             </div>
+          </div>
+          <div className="p-10 space-y-6">
+             <Skeleton className="h-4 w-full" />
+             <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex justify-between border-b border-border/30 pb-4">
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                ))}
+             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!invoice) {
     return (

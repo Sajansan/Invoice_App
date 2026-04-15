@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Modal from '@/components/ui/Modal';
+import { Skeleton, SkeletonCircle } from '@/components/ui/Skeleton';
 import Spinner from '@/components/ui/Spinner';
 import EmptyState from '@/components/ui/EmptyState';
 import {
@@ -98,7 +99,30 @@ export default function ClientsPage() {
     await fetchClients();
   }
 
-  if (loading) return <Spinner />;
+  if (loading) {
+    return (
+      <div className="space-y-8 animate-fadeIn">
+        <div className="space-y-2">
+          <Skeleton className="h-9 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="bg-surface rounded-2xl border border-border overflow-hidden">
+          <div className="p-5 space-y-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="flex items-center justify-between gap-4 py-3 border-b border-border/50 last:border-0">
+                <div className="flex items-center gap-4 w-1/3">
+                   <SkeletonCircle size="w-8 h-8" />
+                   <Skeleton className="h-4 w-full" />
+                </div>
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-4 w-1/4" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-fadeIn">

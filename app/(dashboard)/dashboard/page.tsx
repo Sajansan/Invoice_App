@@ -15,6 +15,7 @@ import {
   TableCell,
 } from '@/components/ui/Table';
 import EmptyState from '@/components/ui/EmptyState';
+import { DashboardSkeleton } from '@/components/ui/Skeleton';
 import { supabase } from '@/lib/supabaseClient';
 import type { Invoice, DashboardStats } from '@/lib/types';
 
@@ -155,7 +156,7 @@ export default function DashboardPage() {
     fetchDashboard();
   }, []);
 
-  if (loading) return <Spinner />;
+  if (loading) return <DashboardSkeleton />;
 
   const statValues: Record<string, string | number> = {
     totalInvoices: stats.totalInvoices,
