@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
-import { LogOut } from 'lucide-react';
+import { LogOut, ChevronUp } from 'lucide-react';
 
 const navItems = [
   {
@@ -49,6 +49,7 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
 
   const handleSignOut = async () => {
@@ -106,27 +107,39 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-4 py-6 mt-auto border-t border-border space-y-4">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-10 h-10 rounded-full border-2 border-primary/30 p-0.5">
+      <div className="px-4 py-6 mt-auto border-t border-border relative">
+        {/* Profile Menu Popup */}
+        {isProfileMenuOpen && (
+          <div className="absolute bottom-full left-4 right-4 mb-2 p-2 bg-surface border border-border rounded-2xl shadow-premium animate-slideUp z-50">
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-all duration-300 group cursor-pointer"
+            >
+              <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        )}
+
+        <button 
+          onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+          className={`
+            w-full flex items-center gap-3 px-3 py-3 rounded-2xl transition-all duration-300
+            ${isProfileMenuOpen ? 'bg-surface shadow-inner' : 'hover:bg-surface/50'}
+          `}
+        >
+          <div className="w-10 h-10 rounded-full border-2 border-primary/30 p-0.5 shrink-0">
             <div className="w-full h-full rounded-full bg-secondary flex items-center justify-center text-primary text-xs font-bold uppercase transition-transform hover:scale-105">
               {user?.email?.substring(0, 2) || 'US'}
             </div>
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 text-left">
             <p className="text-sm font-bold text-foreground truncate">
               {user?.user_metadata?.full_name || 'User'}
             </p>
             <p className="text-xs text-muted truncate">{user?.email}</p>
           </div>
-        </div>
-        
-        <button
-          onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-all duration-300 group cursor-pointer"
-        >
-          <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span>Sign Out</span>
+          <ChevronUp className={`w-4 h-4 text-muted transition-transform duration-300 ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
         </button>
       </div>
     </div>
