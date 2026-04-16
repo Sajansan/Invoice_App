@@ -15,7 +15,7 @@
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
-  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 5px 20px -15px rgba(0, 0, 0, 0.1);
 }
 
 /* Mode: Dark overrides */
@@ -25,7 +25,7 @@
   --surface: #0f172a;
   --border: rgba(255, 255, 255, 0.08);
   --muted: #94a3b8;
-  --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-premium: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 10px 30px -20px rgba(0, 0, 0, 0.5);
 }
 
 /* Theme overrides */
@@ -46,6 +46,10 @@
   --secondary: #0c4a6e;
 }
 
+.font-outline {
+  -webkit-text-stroke: 1px currentColor;
+  -webkit-text-fill-color: transparent;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -55,6 +59,7 @@
   --color-surface: var(--surface);
   --color-border: var(--border);
   --color-muted: var(--muted);
+  --shadow-premium: var(--shadow-premium);
   
   /* Shorthands for existing components */
   --color-slate: var(--secondary);
