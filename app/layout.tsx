@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from '@/lib/ThemeContext';
+import { AuthProvider } from '@/lib/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({
@@ -34,11 +35,13 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
-        <ThemeProvider>
-          {children}
-          <Toaster position="top-right" />
-        </ThemeProvider>
+      <body className="min-h-full font-sans">
+        <AuthProvider>
+          <ThemeProvider>
+            {children}
+            <Toaster position="top-right" />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
