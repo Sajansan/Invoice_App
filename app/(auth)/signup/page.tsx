@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import Card from '@/components/ui/Card';
+import AuthLayout from '@/components/layout/AuthLayout';
 import { Eye, EyeOff, User, Mail, Lock, Phone, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -30,7 +30,6 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation
     if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match');
       return;
@@ -44,7 +43,6 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      // 1. Sign up the user in Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -60,7 +58,6 @@ export default function SignupPage() {
       if (authError) throw authError;
 
       if (authData.user) {
-        // 2. Insert profile information into public.profiles
         const { error: profileError } = await supabase
           .from('profiles')
           .insert([
@@ -75,14 +72,10 @@ export default function SignupPage() {
 
         if (profileError) {
           console.error('Error creating profile:', profileError);
-          // We don't necessarily want to fail here if auth succeeded, 
-          // but the user should know something went wrong.
-          // However, in a "perfect" implementation, we'd want this to be atomic.
-          // Supabase doesn't support cross-schema transactions easily from the client.
         }
       }
 
-      toast.success('Account created! Please check your email for the confirmation link.', {
+      toast.success('Account created! Please check your email for confirmation.', {
         duration: 6000,
       });
       router.push('/login');
@@ -94,181 +87,185 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background animate-fadeIn py-12">
-      <div className="w-full max-w-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-black tracking-tight mb-2">
-            Create <span className="text-primary font-outline">Account</span>
-          </h1>
-          <p className="text-muted text-sm font-medium">
-            Join us and start managing your invoices professionally
-          </p>
-        </div>
-
-        <Card className="p-8 shadow-premium border-none bg-surface overflow-hidden relative">
-          <div className="absolute top-0 left-0 w-2 h-full bg-primary/20"></div>
-          
-          <form onSubmit={handleSignup} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* First Name */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                  <User className="w-3 h-3 text-primary" /> First Name
-                </label>
-                <input
-                  name="firstName"
-                  type="text"
-                  required
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground placeholder:text-muted/30"
-                  placeholder="John"
-                />
+    <AuthLayout 
+      title="Create Account" 
+      subtitle="Join thousands of businesses managing their finances professionally with InvoiceGen."
+    >
+      <form onSubmit={handleSignup} className="space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="relative group">
+            <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+              First Name
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">
+                <User className="w-4 h-4" />
               </div>
-
-              {/* Last Name */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                  <User className="w-3 h-3 text-primary" /> Last Name
-                </label>
-                <input
-                  name="lastName"
-                  type="text"
-                  required
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground placeholder:text-muted/30"
-                  placeholder="Doe"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Email */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                  <Mail className="w-3 h-3 text-primary" /> Email Address
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground placeholder:text-muted/30"
-                  placeholder="john@example.com"
-                />
-              </div>
-
-              {/* Mobile */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                  <Phone className="w-3 h-3 text-primary" /> Mobile Number
-                </label>
-                <input
-                  name="mobile"
-                  type="tel"
-                  required
-                  value={formData.mobile}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground placeholder:text-muted/30"
-                  placeholder="+1 (555) 000-0000"
-                />
-              </div>
-            </div>
-
-            {/* Address */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                <MapPin className="w-3 h-3 text-primary" /> Address (Optional)
-              </label>
-              <textarea
-                name="address"
-                rows={2}
-                value={formData.address}
+              <input
+                name="firstName"
+                type="text"
+                required
+                value={formData.firstName}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground resize-none placeholder:text-muted/30"
-                placeholder="123 Street Name, City, Country"
+                className="w-full pl-10 pr-4 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm"
+                placeholder="John"
               />
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Password */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                  <Lock className="w-3 h-3 text-primary" /> Password
-                </label>
-                <div className="relative">
-                  <input
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none pr-12 text-foreground placeholder:text-muted/30"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors p-2 cursor-pointer"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
+          </div>
+          <div className="relative group">
+            <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+              Last Name
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">
+                <User className="w-4 h-4" />
               </div>
-
-              {/* Confirm Password */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted/80 px-1">
-                  <Lock className="w-3 h-3 text-primary" /> Confirm Password
-                </label>
-                <input
-                  name="confirmPassword"
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-foreground placeholder:text-muted/30"
-                  placeholder="••••••••"
-                />
-              </div>
+              <input
+                name="lastName"
+                type="text"
+                required
+                value={formData.lastName}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm"
+                placeholder="Doe"
+              />
             </div>
+          </div>
+        </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-4 rounded-xl bg-primary text-background font-black tracking-tight hover:brightness-105 active:scale-[0.98] transition-all shadow-premium disabled:opacity-50 cursor-pointer mt-4 flex items-center justify-center gap-2 group"
-            >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-background/30 border-t-background rounded-full animate-spin"></div>
-                  Creating account...
-                </span>
-              ) : (
-                <>
-                  Create Account
-                  <User className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-          </form>
+        <div className="relative group">
+          <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+            Email Address
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">
+              <Mail className="w-4 h-4" />
+            </div>
+            <input
+              name="email"
+              type="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full pl-10 pr-4 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm"
+              placeholder="john@example.com"
+            />
+          </div>
+        </div>
 
-          <p className="mt-8 text-center text-sm text-muted font-medium">
-            Already have an account?{' '}
-            <Link
-              href="/login"
-              className="text-primary font-black hover:underline underline-offset-4 decoration-2"
-            >
-              Sign In
-            </Link>
-          </p>
-        </Card>
-      </div>
-    </div>
+        <div className="relative group">
+          <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+            Mobile Number
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">
+              <Phone className="w-4 h-4" />
+            </div>
+            <input
+              name="mobile"
+              type="tel"
+              required
+              value={formData.mobile}
+              onChange={handleChange}
+              className="w-full pl-10 pr-4 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm"
+              placeholder="+1 (555) 000-0000"
+            />
+          </div>
+        </div>
+
+        <div className="relative group">
+          <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+            Address (Optional)
+          </label>
+          <div className="relative">
+            <div className="absolute left-4 top-5 text-muted group-focus-within:text-primary transition-colors">
+              <MapPin className="w-4 h-4" />
+            </div>
+            <textarea
+              name="address"
+              rows={2}
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full pl-10 pr-4 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm resize-none"
+              placeholder="123 Street Name, City"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="relative group">
+            <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+              Password
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">
+                <Lock className="w-4 h-4" />
+              </div>
+              <input
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full pl-10 pr-10 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors p-1 cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+          <div className="relative group">
+            <label className="absolute -top-3 left-4 bg-background px-2 text-[10px] font-bold uppercase tracking-widest text-primary z-10 transition-colors group-focus-within:text-primary/70">
+              Confirm
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors">
+                <Lock className="w-4 h-4" />
+              </div>
+              <input
+                name="confirmPassword"
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3.5 rounded-2xl bg-transparent border-2 border-border focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all outline-none text-foreground font-medium placeholder:text-muted/30 text-sm"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-4.5 rounded-2xl bg-primary text-slate-950 text-lg font-black tracking-tight hover:brightness-105 active:scale-[0.99] transition-all shadow-[0_10px_30px_-5px_rgba(14,165,233,0.4)] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-3 group mt-4"
+        >
+          {loading ? (
+            <div className="w-6 h-6 border-3 border-slate-950/30 border-t-slate-950 rounded-full animate-spin"></div>
+          ) : (
+            <>
+              Create Your Account
+              <User className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </>
+          )}
+        </button>
+
+        <p className="text-center text-muted font-bold pt-2">
+          Already have an account?{' '}
+          <Link
+            href="/login"
+            className="text-primary hover:underline underline-offset-4 decoration-2"
+          >
+            Sign In
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 }
+
