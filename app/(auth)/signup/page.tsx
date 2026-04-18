@@ -90,7 +90,7 @@ export default function SignupPage() {
     <AuthLayout 
       title={<><span className="text-primary">Create</span> Account</>} 
       subtitle="Join thousands of businesses managing their finances professionally with InvoiceGen."
-      maxWidth="max-w-xl"
+      maxWidth="max-w-md"
     >
 
 
