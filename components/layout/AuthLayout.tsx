@@ -22,11 +22,12 @@ const FileTextSVG = ({ className }: { className?: string }) => (
 
 interface AuthLayoutProps {
   children: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
   subtitle: string;
+  maxWidth?: string;
 }
 
-export default function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
+export default function AuthLayout({ children, title, subtitle, maxWidth = "max-w-md" }: AuthLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
       {/* Left Side: Hero (Hidden on Mobile) */}
@@ -98,12 +99,12 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           </h2>
         </div>
         
-        <div className="w-full max-w-md animate-slideUp">
-          <div className="mb-12 text-center md:text-left pt-16 md:pt-0">
-            <h2 className="text-5xl font-black tracking-tighter mb-4 text-foreground leading-tight">
+        <div className={`w-full ${maxWidth} animate-slideUp`}>
+          <div className="mb-12 text-center pt-16 md:pt-0">
+            <h2 className="text-5xl font-black tracking-tighter mb-4 text-foreground leading-tight mx-auto">
               {title}
             </h2>
-            <p className="text-muted font-semibold text-lg max-w-sm">
+            <p className="text-muted font-semibold text-lg max-w-sm mx-auto">
               {subtitle}
             </p>
           </div>
