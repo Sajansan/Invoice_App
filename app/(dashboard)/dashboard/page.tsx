@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import Button from '@/components/ui/Button';
 import Spinner from '@/components/ui/Spinner';
 import Modal from '@/components/ui/Modal';
 import {
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui/Table';
 import EmptyState from '@/components/ui/EmptyState';
 import { DashboardSkeleton } from '@/components/ui/Skeleton';
+import CreateInvoiceForm from '@/components/forms/CreateInvoiceForm';
 import { supabase } from '@/lib/supabaseClient';
 import type { Invoice, DashboardStats } from '@/lib/types';
 
@@ -97,64 +99,65 @@ export default function DashboardPage() {
   const [recentInvoices, setRecentInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const fetchDashboard = React.useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: invoices, error } = await supabase
+        .from('invoices')
+        .select('*, clients(name)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (invoices) {
+        const now = new Date();
+        const typedInvoices = invoices.map(inv => {
+          const dueDate = new Date(inv.due_date);
+          let status = inv.status;
+          if (status === 'pending' && dueDate < now) {
+            status = 'overdue';
+          }
+          return {
+            ...inv,
+            status
+          };
+        }) as Invoice[];
+
+        setAllInvoices(typedInvoices);
+
+        const paid = typedInvoices.filter((i) => i.status === 'paid');
+        const pending = typedInvoices.filter((i) => i.status === 'pending');
+        const overdue = typedInvoices.filter((i) => i.status === 'overdue');
+        const totalRevenue = paid.reduce(
+          (sum: number, i: Invoice) => sum + (i.total || 0),
+          0
+        );
+
+        setStats({
+          totalInvoices: typedInvoices.length,
+          paid: paid.length,
+          pending: pending.length,
+          overdue: overdue.length,
+          totalRevenue,
+        });
+
+        setRecentInvoices(typedInvoices.slice(0, 5));
+      }
+    } catch (err) {
+      console.error('Dashboard fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    async function fetchDashboard() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data: invoices, error } = await supabase
-          .from('invoices')
-          .select('*, clients(name)')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        if (invoices) {
-          const now = new Date();
-          const typedInvoices = invoices.map(inv => {
-            const dueDate = new Date(inv.due_date);
-            let status = inv.status;
-            if (status === 'pending' && dueDate < now) {
-              status = 'overdue';
-            }
-            return {
-              ...inv,
-              status
-            };
-          }) as Invoice[];
-
-          setAllInvoices(typedInvoices);
-
-          const paid = typedInvoices.filter((i) => i.status === 'paid');
-          const pending = typedInvoices.filter((i) => i.status === 'pending');
-          const overdue = typedInvoices.filter((i) => i.status === 'overdue');
-          const totalRevenue = paid.reduce(
-            (sum: number, i: Invoice) => sum + (i.total || 0),
-            0
-          );
-
-          setStats({
-            totalInvoices: typedInvoices.length,
-            paid: paid.length,
-            pending: pending.length,
-            overdue: overdue.length,
-            totalRevenue,
-          });
-
-          setRecentInvoices(typedInvoices.slice(0, 5));
-        }
-      } catch (err) {
-        console.error('Dashboard fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
     fetchDashboard();
-  }, []);
+  }, [fetchDashboard]);
 
   if (loading) return <DashboardSkeleton />;
 
@@ -168,12 +171,22 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Page header */}
-      <div>
-        <h1 className="text-3xl font-black text-foreground tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-sm text-muted">
-          Overview of your invoicing activity
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black text-foreground tracking-tight">Dashboard</h1>
+          <p className="mt-1 text-sm text-muted">
+            Overview of your invoicing activity
+          </p>
+        </div>
+        <Button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="shadow-premium active:scale-95"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          New Invoice
+        </Button>
       </div>
 
       {/* Stats grid */}
@@ -223,15 +236,15 @@ export default function DashboardPage() {
             title="No invoices yet"
             description="Create your first invoice to see it here."
             action={
-              <Link
-                href="/create-invoice"
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-background bg-primary rounded-lg hover:opacity-90 transition-all shadow-[0_4px_12px_rgba(var(--primary),0.2)]"
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-background bg-primary rounded-lg hover:opacity-90 transition-all shadow-[0_4px_12px_rgba(var(--primary),0.2)] cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
                 Create Invoice
-              </Link>
+              </button>
             }
           />
         ) : (
@@ -313,6 +326,22 @@ export default function DashboardPage() {
             </TableBody>
           </Table>
         </div>
+      </Modal>
+
+      {/* Create Invoice Modal */}
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Create New Invoice"
+        description="Enter the details below to generate a professional invoice."
+      >
+        <CreateInvoiceForm 
+          onSuccess={() => {
+            setIsCreateModalOpen(false);
+            fetchDashboard();
+          }}
+          onCancel={() => setIsCreateModalOpen(false)}
+        />
       </Modal>
     </div>
   );

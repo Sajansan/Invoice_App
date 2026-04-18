@@ -19,9 +19,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<Mode>('light');
 
   useEffect(() => {
+    // Load from localStorage
+    const savedTheme = localStorage.getItem('invoice-app-theme') as Theme;
+    const savedMode = localStorage.getItem('invoice-app-mode') as Mode;
+    if (savedTheme) setTheme(savedTheme);
+    if (savedMode) setMode(savedMode);
+  }, []);
+
+  useEffect(() => {
     // Sync with DOM
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-mode', mode);
+
+    // Save to localStorage
+    localStorage.setItem('invoice-app-theme', theme);
+    localStorage.setItem('invoice-app-mode', mode);
   }, [theme, mode]);
 
 

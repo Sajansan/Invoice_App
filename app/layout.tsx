@@ -35,6 +35,22 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('invoice-app-theme') || 'sky';
+                  var mode = localStorage.getItem('invoice-app-mode') || 'light';
+                  document.documentElement.setAttribute('data-theme', theme);
+                  document.documentElement.setAttribute('data-mode', mode);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full font-sans">
         <AuthProvider>
           <ThemeProvider>
