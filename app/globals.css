@@ -12,10 +12,13 @@
   --surface: #e5e7eb;
   --border: rgba(0, 0, 0, 0.08);
   --muted: #64748b;
+  --primary-rgb: 14, 165, 233;
+  --surface-rgb: 229, 231, 235;
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 5px 20px -15px rgba(0, 0, 0, 0.1);
+  --shadow-premium-lg: 0 20px 50px -12px rgba(0, 0, 0, 0.12), 0 8px 16px -12px rgba(0, 0, 0, 0.1);
 }
 
 /* Mode: Dark overrides */
@@ -25,7 +28,10 @@
   --surface: #0f172a;
   --border: rgba(255, 255, 255, 0.08);
   --muted: #94a3b8;
+  --primary-rgb: 14, 165, 233;
+  --surface-rgb: 15, 23, 42;
   --shadow-premium: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 10px 30px -20px rgba(0, 0, 0, 0.5);
+  --shadow-premium-lg: 0 35px 80px -20px rgba(0, 0, 0, 0.8), 0 15px 40px -25px rgba(0, 0, 0, 0.6);
 }
 
 /* Theme overrides */
@@ -60,6 +66,12 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --shadow-premium: var(--shadow-premium);
+  --shadow-premium-lg: var(--shadow-premium-lg);
+  --shadow-premium-primary: 0 10px 30px -5px rgba(var(--primary-rgb), 0.3);
+  
+  /* Glassmorphism helpers */
+  --bg-glass: rgba(var(--surface-rgb), 0.7);
+  --border-glass: rgba(255, 255, 255, 0.05);
   
   /* Shorthands for existing components */
   --color-slate: var(--secondary);
