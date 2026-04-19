@@ -58,6 +58,7 @@ export default function SignupPage() {
       if (authError) throw authError;
 
       if (authData.user) {
+        // Create profile in the public profiles table
         const { error: profileError } = await supabase
           .from('profiles')
           .insert([
@@ -71,7 +72,9 @@ export default function SignupPage() {
           ]);
 
         if (profileError) {
-          console.error('Error creating profile:', profileError);
+          console.error('Error creating profile row:', profileError);
+          // We don't throw here to allow the user to still benefit from the account creation
+          // They can update their profile later in the Profile tab
         }
       }
 
