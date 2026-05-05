@@ -334,6 +334,7 @@ export default function DashboardPage() {
         onClose={() => setIsCreateModalOpen(false)}
         title="Create New Invoice"
         description="Enter the details below to generate a professional invoice."
+        size="6xl"
       >
         <CreateInvoiceForm 
           onSuccess={() => {

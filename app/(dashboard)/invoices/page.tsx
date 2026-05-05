@@ -236,6 +236,7 @@ export default function InvoicesPage() {
         onClose={() => setIsCreateModalOpen(false)}
         title="Create New Invoice"
         description="Enter the details below to generate a professional invoice for your client."
+        size="6xl"
       >
         <CreateInvoiceForm 
           onSuccess={() => {

@@ -8,9 +8,29 @@ interface ModalProps {
   title: string;
   description?: string;
   children: React.ReactNode;
+  size?: 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl';
 }
 
-export default function Modal({ isOpen, onClose, title, description, children }: ModalProps) {
+const sizeClasses = {
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+  xl: 'max-w-xl',
+  '2xl': 'max-w-2xl',
+  '3xl': 'max-w-3xl',
+  '4xl': 'max-w-4xl',
+  '5xl': 'max-w-5xl',
+  '6xl': 'max-w-6xl',
+  '7xl': 'max-w-7xl',
+};
+
+export default function Modal({ 
+  isOpen, 
+  onClose, 
+  title, 
+  description, 
+  children,
+  size = '2xl'
+}: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,7 +59,7 @@ export default function Modal({ isOpen, onClose, title, description, children }:
       style={{ animation: 'fadeIn 0.2s ease-out' }}
     >
       <div
-        className="relative w-full max-w-2xl bg-surface rounded-2xl shadow-premium border border-border"
+        className={`relative w-full ${sizeClasses[size]} bg-surface rounded-3xl shadow-premium border border-border overflow-hidden`}
         style={{ animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
         {/* Header */}

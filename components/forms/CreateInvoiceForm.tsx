@@ -146,10 +146,10 @@ export default function CreateInvoiceForm({ onSuccess, onCancel }: CreateInvoice
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn p-1">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit} className="space-y-8 animate-fadeIn p-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Left: Basic Info */}
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Select
             id="client-select"
             label="Select Client"
@@ -159,7 +159,7 @@ export default function CreateInvoiceForm({ onSuccess, onCancel }: CreateInvoice
             onChange={(e) => setSelectedClientId(e.target.value)}
             required
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <Input
               id="issue-date"
               label="Issue Date"
@@ -180,48 +180,48 @@ export default function CreateInvoiceForm({ onSuccess, onCancel }: CreateInvoice
         </div>
 
         {/* Right: Summary */}
-        <Card className="p-5 bg-background/50 backdrop-blur-sm border-dashed border-2">
-          <h3 className="text-sm font-bold text-foreground/70 uppercase tracking-wider mb-4">Summary</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm">
+        <Card className="p-8 bg-background/30 backdrop-blur-sm border-dashed border-2 flex flex-col justify-center">
+          <h3 className="text-sm font-black text-foreground/50 uppercase tracking-widest mb-6">Summary</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between text-base">
               <span className="text-muted">Subtotal</span>
-              <span className="font-semibold">{formatCurrency(subtotal)}</span>
+              <span className="font-bold">{formatCurrency(subtotal)}</span>
             </div>
-            <div className="flex justify-between items-center text-sm">
+            <div className="flex justify-between items-center text-base">
               <span className="text-muted">Tax (%)</span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <input
                   type="number"
                   value={tax}
                   onChange={(e) => setTax(Number(e.target.value))}
-                  className="w-14 bg-surface border border-border rounded-md px-1.5 py-0.5 text-right text-xs focus:ring-1 focus:ring-primary focus:outline-none"
+                  className="w-16 bg-surface border border-border rounded-lg px-2 py-1 text-right text-sm font-bold focus:ring-2 focus:ring-primary focus:outline-none transition-all"
                 />
-                <span className="font-semibold w-16 text-right">{formatCurrency(taxAmount)}</span>
+                <span className="font-bold w-20 text-right">{formatCurrency(taxAmount)}</span>
               </div>
             </div>
-            <div className="h-px bg-border my-2" />
-            <div className="flex justify-between text-lg">
-              <span className="font-bold">Total</span>
-              <span className="font-black text-primary">{formatCurrency(total)}</span>
+            <div className="h-px bg-border/50 my-4" />
+            <div className="flex justify-between items-end">
+              <span className="font-bold text-muted uppercase text-xs tracking-widest mb-1">Total Amount</span>
+              <span className="text-4xl font-black text-primary tracking-tight">{formatCurrency(total)}</span>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Items List */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-foreground/70 uppercase tracking-wider">Line Items</h3>
-          <Button type="button" variant="ghost" size="sm" onClick={addItem} className="text-primary hover:text-primary">
+          <h3 className="text-sm font-black text-foreground/50 uppercase tracking-widest">Line Items</h3>
+          <Button type="button" variant="ghost" size="sm" onClick={addItem} className="text-primary hover:text-primary font-bold">
             + Add Item
           </Button>
         </div>
         
-        <div className="max-h-[300px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+        <div className="max-h-[450px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
           {items.map((item, index) => (
             <div
               key={item.id}
-              className="group relative grid grid-cols-12 gap-3 items-start p-4 rounded-xl bg-surface border border-border hover:border-primary/30 transition-all duration-300 shadow-sm"
+              className="group relative grid grid-cols-12 gap-5 items-end p-6 rounded-2xl bg-surface border border-border hover:border-primary/30 hover:shadow-xl transition-all duration-500"
             >
               <div className="col-span-12 sm:col-span-6">
                 <Input
@@ -266,11 +266,11 @@ export default function CreateInvoiceForm({ onSuccess, onCancel }: CreateInvoice
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end gap-3 pt-4 border-t border-border">
-        <Button type="button" variant="ghost" onClick={onCancel}>
+      <div className="flex justify-end gap-4 pt-8 border-t border-border/50">
+        <Button type="button" variant="ghost" onClick={onCancel} className="px-8">
           Cancel
         </Button>
-        <Button type="submit" loading={submitting} className="min-w-[140px]">
+        <Button type="submit" loading={submitting} className="min-w-[180px] shadow-premium shadow-primary/20">
           Create Invoice
         </Button>
       </div>
